@@ -61,27 +61,34 @@
   min-width: 100px;
 }
 
-.btn-primary {
-  background-color: #3498db;
-  color: white;
+.treatment-form button.btn-primary,
+.treatment-form input[type="submit"].btn-primary,
+.treatment-form .btn-primary {
+  background-color: #28a745 !important;
+  color: white !important;
+  border: none !important;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: #2980b9;
+.treatment-form button.btn-primary:hover:not(:disabled),
+.treatment-form input[type="submit"].btn-primary:hover:not(:disabled),
+.treatment-form .btn-primary:hover:not(:disabled) {
+  background-color: #218838 !important;
 }
 
-.btn-primary:disabled {
-  background-color: #bdc3c7;
+.treatment-form button.btn-primary:disabled,
+.treatment-form input[type="submit"].btn-primary:disabled,
+.treatment-form .btn-primary:disabled {
+  background-color: #bdc3c7 !important;
   cursor: not-allowed;
 }
 
-.btn-secondary {
-  background-color: #95a5a6;
-  color: white;
+.treatment-form .btn-secondary {
+  background-color: #dc3545 !important;
+  color: white !important;
 }
 
-.btn-secondary:hover:not(:disabled) {
-  background-color: #7f8c8d;
+.treatment-form .btn-secondary:hover:not(:disabled) {
+  background-color: #c82333 !important;
 }
 
 .error {

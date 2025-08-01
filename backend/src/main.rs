@@ -2,6 +2,8 @@ mod models;
 mod handlers;
 mod routes;
 mod database;
+mod auth;
+mod middleware;
 
 use actix_web::{web, App, HttpServer, middleware::Logger};
 use actix_cors::Cors;
@@ -11,6 +13,7 @@ use std::env;
 
 use database::Database;
 use routes::configure_routes;
+use handlers::auth::create_default_user;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -26,6 +29,11 @@ async fn main() -> std::io::Result<()> {
     
     let db = Database::new(&database_url).await
         .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
+    
+    // Create default user
+    if let Err(e) = create_default_user(&db).await {
+        eprintln!("Warning: Failed to create default user: {}", e);
+    }
     
     let db_data = web::Data::new(db);
 

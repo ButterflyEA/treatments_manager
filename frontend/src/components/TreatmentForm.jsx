@@ -4,7 +4,8 @@ import treatmentService from '../services/treatmentService';
 import './TreatmentForm.css';
 
 function TreatmentForm({ patientId, treatment, onSave, onCancel }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'he';
   const [formData, setFormData] = useState({
     summary: '',
     date: '',
@@ -110,21 +111,65 @@ function TreatmentForm({ patientId, treatment, onSave, onCancel }) {
         </div>
 
         <div className="form-actions">
-          <button
-            type="button"
-            className="btn-secondary"
-            onClick={onCancel}
-            disabled={loading}
-          >
-            {t('cancel')}
-          </button>
-          <button
-            type="submit"
-            className="btn-primary"
-            disabled={loading || !formData.summary.trim()}
-          >
-            {loading ? t('saving') : (treatment ? t('update') : t('create'))}
-          </button>
+          {isRTL ? (
+            // RTL: Create/Update first (right), Cancel second (left)
+            <>
+              <button
+                type="submit"
+                className="btn-primary"
+                style={{
+                  backgroundColor: '#28a745',
+                  borderColor: '#28a745',
+                  color: 'white'
+                }}
+                disabled={loading || !formData.summary.trim()}
+              >
+                {loading ? t('saving') : (treatment ? t('update') : t('create'))}
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{
+                  backgroundColor: '#dc3545',
+                  borderColor: '#dc3545',
+                  color: 'white'
+                }}
+                onClick={onCancel}
+                disabled={loading}
+              >
+                {t('cancel')}
+              </button>
+            </>
+          ) : (
+            // LTR: Cancel first, Create/Update second
+            <>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{
+                  backgroundColor: '#dc3545',
+                  borderColor: '#dc3545',
+                  color: 'white'
+                }}
+                onClick={onCancel}
+                disabled={loading}
+              >
+                {t('cancel')}
+              </button>
+              <button
+                type="submit"
+                className="btn-primary"
+                style={{
+                  backgroundColor: '#28a745',
+                  borderColor: '#28a745',
+                  color: 'white'
+                }}
+                disabled={loading || !formData.summary.trim()}
+              >
+                {loading ? t('saving') : (treatment ? t('update') : t('create'))}
+              </button>
+            </>
+          )}
         </div>
       </form>
     </div>

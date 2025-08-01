@@ -14,14 +14,16 @@
   margin: 0 0 0.5rem 0;
   font-size: 2.5rem;
   font-weight: 600;
+  color: white !important;
 }
 
 .page-description {
   margin: 0;
   font-size: 1.1rem;
-  opacity: 0.9;
+  opacity: 1;
   max-width: 600px;
   margin: 0 auto;
+  color: white !important;
 }
 
 /* RTL Support */
@@ -51,9 +53,11 @@
   
   .page-header h1 {
     font-size: 2rem;
+    color: white !important;
   }
   
   .page-description {
     font-size: 1rem;
+    color: white !important;
   }
 }

@@ -1,17 +1,15 @@
-const API_BASE_URL = 'http://127.0.0.1:8080/api/v1';
+import AuthService from './AuthService';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '/api/v1') || 'http://127.0.0.1:8080/api/v1';
 
 class PatientService {
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      ...options,
-    };
-
+    
     try {
-      const response = await fetch(url, config);
+      const response = await AuthService.makeAuthenticatedRequest(url, options);
+      if (!response) return null; // Redirected due to auth error
+      
       const data = await response.json();
 
       if (!response.ok) {

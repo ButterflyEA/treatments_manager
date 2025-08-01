@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import './Navigation.css';
 
-function Navigation({ currentPage, onNavigate }) {
+function Navigation({ currentPage, onNavigate, user, onLogout }) {
   const { t } = useTranslation();
 
   const menuButtons = (
@@ -41,6 +41,12 @@ function Navigation({ currentPage, onNavigate }) {
         </div>
         
         <div className="nav-right">
+          <div className="user-info">
+            <span className="user-name">{user?.name}</span>
+            <button className="logout-button" onClick={onLogout}>
+              {t('logout')}
+            </button>
+          </div>
           <LanguageSwitcher />
         </div>
       </div>

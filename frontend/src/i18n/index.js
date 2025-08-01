@@ -24,7 +24,10 @@ const resources = {
       updatePatientBtn: "Update Patient",
       editBtn: "Edit",
       deleteBtn: "Delete",
+      edit: "Edit",
+      delete: "Delete",
       cancelBtn: "Cancel",
+      cancel: "Cancel",
       refreshBtn: "Refresh",
       saveBtn: "Save",
       clearFilterBtn: "Clear Filter",
@@ -75,6 +78,7 @@ const resources = {
       patients_page_description: "View and manage all registered patients",
       add_patient_page: "Add New Patient",
       add_patient_description: "Register a new patient in the system",
+      edit_patient_description: "Update patient information for {{name}}",
       
       // Patient Details
       view_details: "View Details",
@@ -102,12 +106,26 @@ const resources = {
       update: "Update",
       saving: "Saving...",
       confirm_delete_treatment: "Are you sure you want to delete this treatment?",
+      treatment_created_successfully: "Treatment created successfully",
+      add_treatment_for: "Add treatment for",
+      back_to_patient: "Back to Patient",
       
       // Treatment Errors
       error_loading_treatments: "Error loading treatments",
       error_creating_treatment: "Error creating treatment",
       error_updating_treatment: "Error updating treatment",
-      error_deleting_treatment: "Error deleting treatment"
+      error_deleting_treatment: "Error deleting treatment",
+      
+      // Login
+      loginTitle: "Treatment Manager Login",
+      email: "Email",
+      password: "Password",
+      emailPlaceholder: "Enter your email",
+      passwordPlaceholder: "Enter your password",
+      login: "Login",
+      loggingIn: "Logging in...",
+      loginError: "Invalid email or password",
+      logout: "Logout"
     }
   },
   he: {
@@ -130,7 +148,10 @@ const resources = {
       updatePatientBtn: "עדכן מטופל",
       editBtn: "ערוך",
       deleteBtn: "מחק",
+      edit: "ערוך",
+      delete: "מחק",
       cancelBtn: "בטל",
+      cancel: "בטל",
       refreshBtn: "רענן",
       saveBtn: "שמור",
       clearFilterBtn: "נקה סינון",
@@ -181,6 +202,7 @@ const resources = {
       patients_page_description: "צפה ונהל את כל המטופלים הרשומים",
       add_patient_page: "הוסף מטופל חדש",
       add_patient_description: "רשום מטופל חדש במערכת",
+      edit_patient_description: "עדכן מידע מטופל עבור {{name}}",
       
       // Patient Details
       view_details: "צפה בפרטים",
@@ -208,12 +230,26 @@ const resources = {
       update: "עדכן",
       saving: "שומר...",
       confirm_delete_treatment: "האם אתה בטוח שברצונך למחוק את הטיפול הזה?",
+      treatment_created_successfully: "הטיפול נוצר בהצלחה",
+      add_treatment_for: "הוסף טיפול עבור",
+      back_to_patient: "חזור למטופל",
       
       // Treatment Errors
       error_loading_treatments: "שגיאה בטעינת טיפולים",
       error_creating_treatment: "שגיאה ביצירת טיפול",
       error_updating_treatment: "שגיאה בעדכון טיפול",
-      error_deleting_treatment: "שגיאה במחיקת טיפול"
+      error_deleting_treatment: "שגיאה במחיקת טיפול",
+      
+      // Login
+      loginTitle: "התחברות למנהל הטיפולים",
+      email: "אימייל",
+      password: "סיסמה",
+      emailPlaceholder: "הכנס את האימייל שלך",
+      passwordPlaceholder: "הכנס את הסיסמה שלך",
+      login: "התחבר",
+      loggingIn: "מתחבר...",
+      loginError: "אימייל או סיסמה לא נכונים",
+      logout: "התנתק"
     }
   }
 };

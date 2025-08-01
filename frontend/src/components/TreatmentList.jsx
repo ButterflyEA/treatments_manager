@@ -5,7 +5,7 @@ import { patientService } from '../services/patientService';
 import TreatmentForm from './TreatmentForm';
 import './TreatmentList.css';
 
-function TreatmentList({ patientId = null, showPatientInfo = true }) {
+function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton = false }) {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'he';
   const [treatments, setTreatments] = useState([]);
@@ -148,7 +148,7 @@ function TreatmentList({ patientId = null, showPatientInfo = true }) {
         <h2>
           {patientId ? t('patient_treatments') : t('all_treatments')}
         </h2>
-        {patientId && (
+        {patientId && !hideAddButton && (
           <button
             className="btn-primary"
             onClick={() => {

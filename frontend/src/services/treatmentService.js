@@ -1,14 +1,18 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+import AuthService from './AuthService';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '/api/v1') || 'http://127.0.0.1:8080/api/v1';
 
 class TreatmentService {
   async createTreatment(patientId, treatmentData) {
-    const response = await fetch(`${API_BASE_URL}/patients/${patientId}/treatments`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(treatmentData),
-    });
+    const response = await AuthService.makeAuthenticatedRequest(
+      `${API_BASE_URL}/patients/${patientId}/treatments`,
+      {
+        method: 'POST',
+        body: JSON.stringify(treatmentData),
+      }
+    );
+
+    if (!response) return null;
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -18,8 +22,12 @@ class TreatmentService {
   }
 
   async getTreatmentsForPatient(patientId) {
-    const response = await fetch(`${API_BASE_URL}/patients/${patientId}/treatments`);
+    const response = await AuthService.makeAuthenticatedRequest(
+      `${API_BASE_URL}/patients/${patientId}/treatments`
+    );
     
+    if (!response) return null;
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -28,8 +36,10 @@ class TreatmentService {
   }
 
   async getAllTreatments() {
-    const response = await fetch(`${API_BASE_URL}/treatments`);
+    const response = await AuthService.makeAuthenticatedRequest(`${API_BASE_URL}/treatments`);
     
+    if (!response) return null;
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -38,8 +48,12 @@ class TreatmentService {
   }
 
   async getTreatmentById(patientId, treatmentId) {
-    const response = await fetch(`${API_BASE_URL}/patients/${patientId}/treatments/${treatmentId}`);
+    const response = await AuthService.makeAuthenticatedRequest(
+      `${API_BASE_URL}/patients/${patientId}/treatments/${treatmentId}`
+    );
     
+    if (!response) return null;
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -48,13 +62,15 @@ class TreatmentService {
   }
 
   async updateTreatment(patientId, treatmentId, treatmentData) {
-    const response = await fetch(`${API_BASE_URL}/patients/${patientId}/treatments/${treatmentId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(treatmentData),
-    });
+    const response = await AuthService.makeAuthenticatedRequest(
+      `${API_BASE_URL}/patients/${patientId}/treatments/${treatmentId}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(treatmentData),
+      }
+    );
+
+    if (!response) return null;
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -64,9 +80,14 @@ class TreatmentService {
   }
 
   async deleteTreatment(patientId, treatmentId) {
-    const response = await fetch(`${API_BASE_URL}/patients/${patientId}/treatments/${treatmentId}`, {
-      method: 'DELETE',
-    });
+    const response = await AuthService.makeAuthenticatedRequest(
+      `${API_BASE_URL}/patients/${patientId}/treatments/${treatmentId}`,
+      {
+        method: 'DELETE',
+      }
+    );
+
+    if (!response) return null;
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

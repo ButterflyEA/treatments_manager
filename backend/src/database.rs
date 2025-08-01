@@ -20,6 +20,10 @@ impl Database {
         Ok(Database { pool })
     }
 
+    pub fn pool(&self) -> &SqlitePool {
+        &self.pool
+    }
+
     pub async fn create_patient(&self, patient: &Patient) -> Result<()> {
         sqlx::query(
             r#"

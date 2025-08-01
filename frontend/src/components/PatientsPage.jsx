@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import PatientList from './PatientList';
-import PatientForm from './PatientForm';
 import { patientService } from '../services/patientService';
 import './PatientsPage.css';
 
-function PatientsPage({ onViewPatientDetails }) {
+function PatientsPage({ onViewPatientDetails, onEditPatient }) {
   const { t } = useTranslation();
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [editingPatient, setEditingPatient] = useState(null);
   const [message, setMessage] = useState({ text: '', type: '' });
   const [loading, setLoading] = useState(false);
 
@@ -49,20 +47,6 @@ function PatientsPage({ onViewPatientDetails }) {
     setTimeout(() => setMessage({ text: '', type: '' }), 5000);
   };
 
-  const handleUpdatePatient = async (patientData) => {
-    try {
-      setLoading(true);
-      await patientService.update(editingPatient.id, patientData);
-      showMessage(t('patientUpdated'), 'success');
-      loadPatients();
-      setEditingPatient(null);
-    } catch (error) {
-      showMessage(`${t('errorUpdating')}: ${error.message}`, 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleDeletePatient = async (patientId) => {
     if (window.confirm(t('deleteConfirm'))) {
       try {
@@ -79,11 +63,9 @@ function PatientsPage({ onViewPatientDetails }) {
   };
 
   const handleEditPatient = (patient) => {
-    setEditingPatient(patient);
-  };
-
-  const handleCancelEdit = () => {
-    setEditingPatient(null);
+    if (onEditPatient) {
+      onEditPatient(patient.id);
+    }
   };
 
   return (
@@ -97,21 +79,6 @@ function PatientsPage({ onViewPatientDetails }) {
         {message.text && (
           <div className={`message ${message.type}`}>
             {message.text}
-          </div>
-        )}
-
-        {/* Edit Patient Modal */}
-        {editingPatient && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <h2>{t('editPatient')}</h2>
-              <PatientForm
-                patient={editingPatient}
-                onSubmit={handleUpdatePatient}
-                onCancel={handleCancelEdit}
-                loading={loading}
-              />
-            </div>
           </div>
         )}
 
