@@ -6,13 +6,20 @@ import TreatmentForm from './TreatmentForm';
 import './TreatmentList.css';
 
 function TreatmentList({ patientId = null, showPatientInfo = true }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'he';
   const [treatments, setTreatments] = useState([]);
+  const [filteredTreatments, setFilteredTreatments] = useState([]);
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editingTreatment, setEditingTreatment] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
   useEffect(() => {
     loadTreatments();
@@ -20,6 +27,54 @@ function TreatmentList({ patientId = null, showPatientInfo = true }) {
       loadPatients();
     }
   }, [patientId, showPatientInfo]);
+
+  // Filter treatments when search term, date range, or treatments list changes
+  useEffect(() => {
+    filterTreatments();
+  }, [treatments, searchTerm, fromDate, toDate, patients]);
+
+  const filterTreatments = () => {
+    let filtered = [...treatments];
+
+    // Filter by search term (patient name or treatment summary)
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(treatment => {
+        const patientName = getPatientName(treatment.patient_id).toLowerCase();
+        const treatmentSummary = treatment.summary.toLowerCase();
+        const searchLower = searchTerm.toLowerCase();
+        
+        return patientName.includes(searchLower) || treatmentSummary.includes(searchLower);
+      });
+    }
+
+    // Filter by date range
+    if (fromDate) {
+      filtered = filtered.filter(treatment => {
+        const treatmentDate = new Date(treatment.date);
+        const fromDateTime = new Date(fromDate);
+        return treatmentDate >= fromDateTime;
+      });
+    }
+
+    if (toDate) {
+      filtered = filtered.filter(treatment => {
+        const treatmentDate = new Date(treatment.date);
+        const toDateTime = new Date(toDate);
+        toDateTime.setHours(23, 59, 59, 999); // Include the entire end date
+        return treatmentDate <= toDateTime;
+      });
+    }
+
+    setFilteredTreatments(filtered);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setFromDate('');
+    setToDate('');
+  };
+
+  const hasActiveFilters = searchTerm.trim() || fromDate || toDate;
 
   const loadTreatments = async () => {
     try {
@@ -31,6 +86,7 @@ function TreatmentList({ patientId = null, showPatientInfo = true }) {
         data = await treatmentService.getAllTreatments();
       }
       setTreatments(data);
+      // The useEffect will handle filtering
       setError('');
     } catch (err) {
       setError(t('error_loading_treatments'));
@@ -105,6 +161,89 @@ function TreatmentList({ patientId = null, showPatientInfo = true }) {
         )}
       </div>
 
+      {/* Filter Controls - only show for all treatments view */}
+      {!patientId && (
+        <div className="filter-section">
+          <div className="filter-header">
+            <h3>{t('filterTreatments')}</h3>
+            {hasActiveFilters && (
+              <button
+                className="btn-clear-filters"
+                onClick={clearFilters}
+              >
+                {t('clearFilters')}
+              </button>
+            )}
+          </div>
+          
+          <div className="filter-controls">
+            <div className="search-filter">
+              <input
+                type="text"
+                placeholder={t('searchTreatments')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="filter-search-input"
+              />
+            </div>
+            
+            <div className="date-filters">
+              {isRTL ? (
+                // RTL: To Date first, then From Date
+                <>
+                  <div className="date-filter">
+                    <label htmlFor="toDate">{t('toDate')}:</label>
+                    <input
+                      id="toDate"
+                      type="date"
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      className="date-input"
+                    />
+                  </div>
+                  
+                  <div className="date-filter">
+                    <label htmlFor="fromDate">{t('fromDate')}:</label>
+                    <input
+                      id="fromDate"
+                      type="date"
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                      className="date-input"
+                    />
+                  </div>
+                </>
+              ) : (
+                // LTR: From Date first, then To Date
+                <>
+                  <div className="date-filter">
+                    <label htmlFor="fromDate">{t('fromDate')}:</label>
+                    <input
+                      id="fromDate"
+                      type="date"
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                      className="date-input"
+                    />
+                  </div>
+                  
+                  <div className="date-filter">
+                    <label htmlFor="toDate">{t('toDate')}:</label>
+                    <input
+                      id="toDate"
+                      type="date"
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      className="date-input"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {error && <div className="error">{error}</div>}
 
       {showForm && (
@@ -123,44 +262,52 @@ function TreatmentList({ patientId = null, showPatientInfo = true }) {
         </div>
       )}
 
-      {treatments.length === 0 ? (
-        <div className="no-treatments">
-          {t('no_treatments_found')}
+      {(!patientId && hasActiveFilters && filteredTreatments.length === 0 && treatments.length > 0) ? (
+        <div className="no-results">
+          <p>{t('noMatchingTreatments')}</p>
         </div>
       ) : (
-        <div className="treatments-grid">
-          {treatments.map((treatment) => (
-            <div key={treatment.id} className="treatment-card">
-              <div className="treatment-header">
-                {showPatientInfo && (
-                  <div className="patient-info">
-                    <strong>{t('patient')}: {getPatientName(treatment.patient_id)}</strong>
-                  </div>
-                )}
-                <div className="treatment-date">
-                  {formatDate(treatment.date)}
-                </div>
-              </div>
-              <div className="treatment-summary">
-                {treatment.summary}
-              </div>
-              <div className="treatment-actions">
-                <button
-                  className="btn-edit"
-                  onClick={() => handleEditTreatment(treatment)}
-                >
-                  {t('edit')}
-                </button>
-                <button
-                  className="btn-delete"
-                  onClick={() => handleDeleteTreatment(treatment)}
-                >
-                  {t('delete')}
-                </button>
-              </div>
+        <>
+          {(patientId ? treatments : filteredTreatments).length === 0 ? (
+            <div className="no-treatments">
+              {t('no_treatments_found')}
             </div>
-          ))}
-        </div>
+          ) : (
+            <div className="treatments-grid">
+              {(patientId ? treatments : filteredTreatments).map((treatment) => (
+                <div key={treatment.id} className="treatment-card">
+                  <div className="treatment-header">
+                    {showPatientInfo && (
+                      <div className="patient-info">
+                        <strong>{t('patient')}: {getPatientName(treatment.patient_id)}</strong>
+                      </div>
+                    )}
+                    <div className="treatment-date">
+                      {formatDate(treatment.date)}
+                    </div>
+                  </div>
+                  <div className="treatment-summary">
+                    {treatment.summary}
+                  </div>
+                  <div className="treatment-actions">
+                    <button
+                      className="btn-edit"
+                      onClick={() => handleEditTreatment(treatment)}
+                    >
+                      {t('edit')}
+                    </button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => handleDeleteTreatment(treatment)}
+                    >
+                      {t('delete')}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

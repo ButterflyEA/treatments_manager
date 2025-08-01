@@ -8,6 +8,8 @@ import './PatientsPage.css';
 function PatientsPage({ onViewPatientDetails }) {
   const { t } = useTranslation();
   const [patients, setPatients] = useState([]);
+  const [filteredPatients, setFilteredPatients] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [editingPatient, setEditingPatient] = useState(null);
   const [message, setMessage] = useState({ text: '', type: '' });
   const [loading, setLoading] = useState(false);
@@ -16,11 +18,25 @@ function PatientsPage({ onViewPatientDetails }) {
     loadPatients();
   }, []);
 
+  // Filter patients when search term or patients list changes
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredPatients(patients);
+    } else {
+      const filtered = patients.filter(patient =>
+        patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredPatients(filtered);
+    }
+  }, [patients, searchTerm]);
+
   const loadPatients = async () => {
     try {
       setLoading(true);
       const data = await patientService.getAll();
-      setPatients(data.patients || []);
+      const patientsList = data.patients || [];
+      setPatients(patientsList);
+      // The useEffect will handle filtering
     } catch (error) {
       showMessage(`${t('errorLoading')}: ${error.message}`, 'error');
     } finally {
@@ -103,22 +119,48 @@ function PatientsPage({ onViewPatientDetails }) {
         <div className="patients-list-section">
           <div className="list-header">
             <h2>{t('patientsList')}</h2>
-            <button 
-              className="btn-refresh" 
-              onClick={loadPatients}
-              disabled={loading}
-            >
-              {loading ? t('loading') : t('refreshBtn')}
-            </button>
+            <div className="list-controls">
+              <div className="search-container">
+                <input
+                  type="text"
+                  placeholder={t('searchPatients')}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+                {searchTerm && (
+                  <button
+                    className="btn-clear-filter"
+                    onClick={() => setSearchTerm('')}
+                    title={t('clearFilterBtn')}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+              <button 
+                className="btn-refresh" 
+                onClick={loadPatients}
+                disabled={loading}
+              >
+                {loading ? t('loading') : t('refreshBtn')}
+              </button>
+            </div>
           </div>
           
-          <PatientList
-            patients={patients}
-            onEdit={handleEditPatient}
-            onDelete={handleDeletePatient}
-            onViewDetails={onViewPatientDetails}
-            loading={loading}
-          />
+          {searchTerm && filteredPatients.length === 0 && patients.length > 0 ? (
+            <div className="no-results">
+              <p>{t('noMatchingPatients')}</p>
+            </div>
+          ) : (
+            <PatientList
+              patients={filteredPatients}
+              onEdit={handleEditPatient}
+              onDelete={handleDeletePatient}
+              onViewDetails={onViewPatientDetails}
+              loading={loading}
+            />
+          )}
         </div>
       </div>
     </div>

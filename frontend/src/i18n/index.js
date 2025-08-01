@@ -27,6 +27,20 @@ const resources = {
       cancelBtn: "Cancel",
       refreshBtn: "Refresh",
       saveBtn: "Save",
+      clearFilterBtn: "Clear Filter",
+      
+      // Search and Filter
+      searchPatients: "Search patients by name...",
+      filterByName: "Filter by Name",
+      noMatchingPatients: "No patients found matching your search.",
+      searchTreatments: "Search by patient name or treatment details...",
+      filterTreatments: "Filter Treatments",
+      dateRange: "Date Range",
+      fromDate: "From Date",
+      toDate: "To Date",
+      noMatchingTreatments: "No treatments found matching your filters.",
+      allTreatments: "All Treatments",
+      clearFilters: "Clear Filters",
       
       // Messages
       patientCreated: "Patient created successfully!",
@@ -119,6 +133,20 @@ const resources = {
       cancelBtn: "בטל",
       refreshBtn: "רענן",
       saveBtn: "שמור",
+      clearFilterBtn: "נקה סינון",
+      
+      // Search and Filter
+      searchPatients: "חפש מטופלים לפי שם...",
+      filterByName: "סנן לפי שם",
+      noMatchingPatients: "לא נמצאו מטופלים התואמים לחיפוש שלך.",
+      searchTreatments: "חפש לפי שם מטופל או פרטי טיפול...",
+      filterTreatments: "סנן טיפולים",
+      dateRange: "טווח תאריכים",
+      fromDate: "מתאריך",
+      toDate: "עד תאריך",
+      noMatchingTreatments: "לא נמצאו טיפולים התואמים למסננים שלך.",
+      allTreatments: "כל הטיפולים",
+      clearFilters: "נקה מסננים",
       
       // Messages
       patientCreated: "המטופל נוצר בהצלחה!",

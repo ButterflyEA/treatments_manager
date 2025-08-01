@@ -52,6 +52,70 @@
   font-size: 1.8rem;
 }
 
+.list-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 250px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.search-input::placeholder {
+  color: #95a5a6;
+}
+
+.btn-clear-filter {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #95a5a6;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-clear-filter:hover {
+  color: #e74c3c;
+  background-color: #f8f9fa;
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  color: #95a5a6;
+}
+
+.no-results p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
 .btn-refresh {
   background-color: #95a5a6;
   color: white;
@@ -158,12 +222,26 @@
     align-items: stretch;
   }
   
+  .list-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
   .modal-content {
     margin: 1rem;
     width: auto;
   }
   
   [dir="rtl"] .list-header {
+    flex-direction: column;
+  }
+  
+  [dir="rtl"] .list-controls {
     flex-direction: column;
   }
 }
@@ -202,12 +280,31 @@
   order: 2; /* Ensure title appears on the right */
 }
 
+[dir="rtl"] .list-controls {
+  flex-direction: row-reverse;
+  gap: 1rem;
+  order: 1; /* Ensure controls appear on the left */
+}
+
+[dir="rtl"] .search-container {
+  direction: rtl;
+}
+
+[dir="rtl"] .search-input {
+  text-align: right;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+}
+
+[dir="rtl"] .btn-clear-filter {
+  left: 0.5rem;
+  right: auto;
+}
+
 [dir="rtl"] .btn-refresh,
 [dir="rtl"] .refresh-btn {
   margin-left: 0;
   margin-right: 0;
   direction: ltr; /* Keep button text LTR for readability */
-  order: 1; /* Ensure button appears on the left */
 }
 
 [dir="rtl"] .modal-content {
