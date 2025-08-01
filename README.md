@@ -5,9 +5,12 @@ A web application for managing patient treatments with a Rust backend (Actix-web
 ## Features
 
 - **Patient Management**: Full CRUD operations for patient records
-- **Patient Information**: Store name, email, phone number, and description
+- **Patient Information**: Store name, email, phone number, description, and date
 - **RESTful API**: Clean API endpoints for all operations
-- **Web Interface**: Simple HTML interface for testing and managing patients
+- **SQLite Database**: Persistent data storage with SQLite
+- **Database Migrations**: Automatic database schema management
+- **Internationalization**: Support for English and Hebrew languages with RTL layout
+- **Modern Frontend**: React with Vite for fast development and hot reloading
 
 ## Project Structure
 
@@ -138,6 +141,9 @@ curl -X DELETE http://127.0.0.1:8080/api/v1/patients/{patient-id}
 - **serde**: Serialization/deserialization
 - **uuid**: UUID generation
 - **tokio**: Async runtime
+- **sqlx**: Async SQL toolkit with SQLite support
+- **chrono**: Date and time library
+- **anyhow**: Error handling
 
 ### Frontend Dependencies
 
@@ -147,14 +153,15 @@ curl -X DELETE http://127.0.0.1:8080/api/v1/patients/{patient-id}
 
 ### Current Implementation Notes
 
-- **Storage**: Currently using in-memory storage (HashMap) for simplicity
+- **Database**: SQLite database for persistent storage (`patients.db`)
+- **Migrations**: Automatic database schema setup and migrations
 - **Authentication**: Not implemented yet
-- **Database**: Not connected to a database yet (ready for future integration)
 - **Frontend**: Modern React application with Vite for fast development
+- **i18n**: Full internationalization support for English and Hebrew
 
 ### Future Enhancements
 
-1. **Database Integration**: Add PostgreSQL or MongoDB support
+1. **Database Optimization**: Add connection pooling and query optimization
 2. **Authentication**: Implement user authentication and authorization
 3. **Treatment Records**: Add treatment history and medical records
 4. **Advanced React Features**: Add routing, state management (Redux/Zustand)
@@ -162,6 +169,7 @@ curl -X DELETE http://127.0.0.1:8080/api/v1/patients/{patient-id}
 6. **Data Validation**: Enhanced input validation and error handling
 7. **Testing**: Unit and integration tests for both frontend and backend
 8. **PWA Features**: Offline support and push notifications
+9. **Database Backup**: Automated backup and restore functionality
 
 ## Contributing
 

@@ -1,17 +1,13 @@
 use actix_web::{web, HttpResponse, Result};
 use serde_json::json;
 use uuid::Uuid;
-use std::collections::HashMap;
-use std::sync::Mutex;
 
 use crate::models::{Patient, CreatePatientRequest, UpdatePatientRequest};
-
-// In-memory storage for demonstration (in production, use a database)
-pub type PatientStorage = Mutex<HashMap<Uuid, Patient>>;
+use crate::database::Database;
 
 pub async fn create_patient(
     data: web::Json<CreatePatientRequest>,
-    storage: web::Data<PatientStorage>,
+    db: web::Data<Database>,
 ) -> Result<HttpResponse> {
     let patient = Patient::new(
         data.name.clone(),
@@ -21,78 +17,117 @@ pub async fn create_patient(
         data.date,
     );
 
-    let mut patients = storage.lock().unwrap();
-    let patient_id = patient.id;
-    patients.insert(patient_id, patient.clone());
-
-    Ok(HttpResponse::Created().json(json!({
-        "message": "Patient created successfully",
-        "patient": patient
-    })))
+    match db.create_patient(&patient).await {
+        Ok(_) => Ok(HttpResponse::Created().json(json!({
+            "message": "Patient created successfully",
+            "patient": patient
+        }))),
+        Err(e) => {
+            eprintln!("Database error: {}", e);
+            Ok(HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to create patient"
+            })))
+        }
+    }
 }
 
 pub async fn get_all_patients(
-    storage: web::Data<PatientStorage>,
+    db: web::Data<Database>,
 ) -> Result<HttpResponse> {
-    let patients = storage.lock().unwrap();
-    let patients_list: Vec<Patient> = patients.values().cloned().collect();
-
-    Ok(HttpResponse::Ok().json(json!({
-        "patients": patients_list,
-        "count": patients_list.len()
-    })))
+    match db.get_all_patients().await {
+        Ok(patients) => Ok(HttpResponse::Ok().json(json!({
+            "patients": patients,
+            "count": patients.len()
+        }))),
+        Err(e) => {
+            eprintln!("Database error: {}", e);
+            Ok(HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to fetch patients"
+            })))
+        }
+    }
 }
 
 pub async fn get_patient_by_id(
     path: web::Path<Uuid>,
-    storage: web::Data<PatientStorage>,
+    db: web::Data<Database>,
 ) -> Result<HttpResponse> {
     let patient_id = path.into_inner();
-    let patients = storage.lock().unwrap();
 
-    match patients.get(&patient_id) {
-        Some(patient) => Ok(HttpResponse::Ok().json(patient)),
-        None => Ok(HttpResponse::NotFound().json(json!({
+    match db.get_patient_by_id(patient_id).await {
+        Ok(Some(patient)) => Ok(HttpResponse::Ok().json(patient)),
+        Ok(None) => Ok(HttpResponse::NotFound().json(json!({
             "error": "Patient not found"
-        })))
+        }))),
+        Err(e) => {
+            eprintln!("Database error: {}", e);
+            Ok(HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to fetch patient"
+            })))
+        }
     }
 }
 
 pub async fn update_patient(
     path: web::Path<Uuid>,
     data: web::Json<UpdatePatientRequest>,
-    storage: web::Data<PatientStorage>,
+    db: web::Data<Database>,
 ) -> Result<HttpResponse> {
     let patient_id = path.into_inner();
-    let mut patients = storage.lock().unwrap();
 
-    match patients.get_mut(&patient_id) {
-        Some(patient) => {
-            patient.update(data.into_inner());
-            Ok(HttpResponse::Ok().json(json!({
-                "message": "Patient updated successfully",
-                "patient": patient
-            })))
-        },
-        None => Ok(HttpResponse::NotFound().json(json!({
+    // First, get the existing patient
+    let existing_patient = match db.get_patient_by_id(patient_id).await {
+        Ok(Some(patient)) => patient,
+        Ok(None) => return Ok(HttpResponse::NotFound().json(json!({
             "error": "Patient not found"
-        })))
+        }))),
+        Err(e) => {
+            eprintln!("Database error: {}", e);
+            return Ok(HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to fetch patient"
+            })));
+        }
+    };
+
+    // Create updated patient
+    let mut updated_patient = existing_patient;
+    updated_patient.update(data.into_inner());
+
+    match db.update_patient(patient_id, &updated_patient).await {
+        Ok(true) => Ok(HttpResponse::Ok().json(json!({
+            "message": "Patient updated successfully",
+            "patient": updated_patient
+        }))),
+        Ok(false) => Ok(HttpResponse::NotFound().json(json!({
+            "error": "Patient not found"
+        }))),
+        Err(e) => {
+            eprintln!("Database error: {}", e);
+            Ok(HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to update patient"
+            })))
+        }
     }
 }
 
 pub async fn delete_patient(
     path: web::Path<Uuid>,
-    storage: web::Data<PatientStorage>,
+    db: web::Data<Database>,
 ) -> Result<HttpResponse> {
     let patient_id = path.into_inner();
-    let mut patients = storage.lock().unwrap();
 
-    match patients.remove(&patient_id) {
-        Some(_) => Ok(HttpResponse::Ok().json(json!({
+    match db.delete_patient(patient_id).await {
+        Ok(true) => Ok(HttpResponse::Ok().json(json!({
             "message": "Patient deleted successfully"
         }))),
-        None => Ok(HttpResponse::NotFound().json(json!({
+        Ok(false) => Ok(HttpResponse::NotFound().json(json!({
             "error": "Patient not found"
-        })))
+        }))),
+        Err(e) => {
+            eprintln!("Database error: {}", e);
+            Ok(HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to delete patient"
+            })))
+        }
     }
 }

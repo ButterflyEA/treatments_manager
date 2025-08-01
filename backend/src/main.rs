@@ -1,14 +1,13 @@
 mod models;
 mod handlers;
 mod routes;
+mod database;
 
 use actix_web::{web, App, HttpServer, middleware::Logger};
 use actix_cors::Cors;
-use std::collections::HashMap;
-use std::sync::Mutex;
 use env_logger;
 
-use handlers::PatientStorage;
+use database::Database;
 use routes::configure_routes;
 
 #[actix_web::main]
@@ -16,10 +15,15 @@ async fn main() -> std::io::Result<()> {
     // Initialize logger
     env_logger::init();
 
-    // Initialize in-memory storage
-    let patient_storage = web::Data::new(PatientStorage::new(HashMap::new()));
+    // Initialize database
+    let database_url = "sqlite:./patients.db?mode=rwc";
+    let db = Database::new(database_url).await
+        .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
+    
+    let db_data = web::Data::new(db);
 
     println!("🚀 Starting Treatment Manager Backend Server on http://127.0.0.1:8080");
+    println!("📊 Database: SQLite (patients.db)");
 
     HttpServer::new(move || {
         let cors = Cors::default()
@@ -29,7 +33,7 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
 
         App::new()
-            .app_data(patient_storage.clone())
+            .app_data(db_data.clone())
             .wrap(cors)
             .wrap(Logger::default())
             .configure(configure_routes)

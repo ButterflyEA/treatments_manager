@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PatientList = ({ patients, onEdit, onDelete, loading }) => {
+const PatientList = ({ patients, onEdit, onDelete, onViewDetails, loading }) => {
   const { t } = useTranslation();
 
   if (loading) {
@@ -37,6 +37,12 @@ const PatientList = ({ patients, onEdit, onDelete, loading }) => {
               <p><strong>{t('description')}:</strong> {patient.description}</p>
             </div>
             <div className="patient-actions">
+              <button 
+                className="btn btn-primary"
+                onClick={() => onViewDetails(patient.id)}
+              >
+                {t('view_details')}
+              </button>
               <button 
                 className="btn btn-success"
                 onClick={() => onEdit(patient)}

@@ -49,7 +49,51 @@ const resources = {
       // Language
       language: "Language",
       english: "English",
-      hebrew: "Hebrew"
+      hebrew: "Hebrew",
+      
+      // Navigation
+      treatments_manager: "Treatments Manager",
+      patients: "Patients",
+      treatments: "Treatments",
+      add_patient: "Add Patient",
+      
+      // Page descriptions
+      patients_page_description: "View and manage all registered patients",
+      add_patient_page: "Add New Patient",
+      add_patient_description: "Register a new patient in the system",
+      
+      // Patient Details
+      view_details: "View Details",
+      back_to_patients: "Back to Patients",
+      edit_patient: "Edit Patient",
+      registrationDate: "Registration Date",
+      patient_not_found: "Patient not found",
+      error_loading_patient: "Error loading patient",
+      
+      // Treatments
+      patient_treatments: "Patient Treatments",
+      all_treatments: "All Treatments",
+      add_treatment: "Add Treatment",
+      edit_treatment: "Edit Treatment",
+      treatment_summary: "Treatment Summary",
+      treatment_date: "Treatment Date",
+      treatment_summary_placeholder: "Enter treatment details, diagnosis, medications, notes...",
+      patient: "Patient",
+      unknown_patient: "Unknown Patient",
+      no_treatments_found: "No treatments found",
+      treatments_page_description: "View and manage all patient treatments",
+      
+      // Treatment Actions
+      create: "Create",
+      update: "Update",
+      saving: "Saving...",
+      confirm_delete_treatment: "Are you sure you want to delete this treatment?",
+      
+      // Treatment Errors
+      error_loading_treatments: "Error loading treatments",
+      error_creating_treatment: "Error creating treatment",
+      error_updating_treatment: "Error updating treatment",
+      error_deleting_treatment: "Error deleting treatment"
     }
   },
   he: {
@@ -97,7 +141,51 @@ const resources = {
       // Language
       language: "שפה",
       english: "אנגלית",
-      hebrew: "עברית"
+      hebrew: "עברית",
+      
+      // Navigation
+      treatments_manager: "מנהל הטיפולים",
+      patients: "מטופלים",
+      treatments: "טיפולים",
+      add_patient: "הוסף מטופל",
+      
+      // Page descriptions
+      patients_page_description: "צפה ונהל את כל המטופלים הרשומים",
+      add_patient_page: "הוסף מטופל חדש",
+      add_patient_description: "רשום מטופל חדש במערכת",
+      
+      // Patient Details
+      view_details: "צפה בפרטים",
+      back_to_patients: "חזור למטופלים",
+      edit_patient: "ערוך מטופל",
+      registrationDate: "תאריך רישום",
+      patient_not_found: "מטופל לא נמצא",
+      error_loading_patient: "שגיאה בטעינת מטופל",
+      
+      // Treatments
+      patient_treatments: "טיפולי המטופל",
+      all_treatments: "כל הטיפולים",
+      add_treatment: "הוסף טיפול",
+      edit_treatment: "ערוך טיפול",
+      treatment_summary: "תקציר הטיפול",
+      treatment_date: "תאריך הטיפול",
+      treatment_summary_placeholder: "הזן פרטי טיפול, אבחנה, תרופות, הערות...",
+      patient: "מטופל",
+      unknown_patient: "מטופל לא ידוע",
+      no_treatments_found: "לא נמצאו טיפולים",
+      treatments_page_description: "צפה ונהל את כל טיפולי המטופלים",
+      
+      // Treatment Actions
+      create: "צור",
+      update: "עדכן",
+      saving: "שומר...",
+      confirm_delete_treatment: "האם אתה בטוח שברצונך למחוק את הטיפול הזה?",
+      
+      // Treatment Errors
+      error_loading_treatments: "שגיאה בטעינת טיפולים",
+      error_creating_treatment: "שגיאה ביצירת טיפול",
+      error_updating_treatment: "שגיאה בעדכון טיפול",
+      error_deleting_treatment: "שגיאה במחיקת טיפול"
     }
   }
 };

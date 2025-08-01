@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import PatientForm from './PatientForm';
 import PatientList from './PatientList';
-import LanguageSwitcher from './LanguageSwitcher';
 import { patientService } from '../services/patientService';
 
-const PatientManager = () => {
+const PatientManager = ({ onViewPatientDetails }) => {
   const { t } = useTranslation();
   const [patients, setPatients] = useState([]);
   const [editingPatient, setEditingPatient] = useState(null);
@@ -87,11 +86,6 @@ const PatientManager = () => {
 
   return (
     <div className="patient-manager">
-      <div className="header">
-        <h1>{t('pageTitle')}</h1>
-        <LanguageSwitcher />
-      </div>
-
       {message.text && (
         <div className={`message ${message.type}`}>
           {message.text}
@@ -124,6 +118,7 @@ const PatientManager = () => {
           patients={patients}
           onEdit={handleEditPatient}
           onDelete={handleDeletePatient}
+          onViewDetails={onViewPatientDetails}
           loading={loading}
         />
       </div>

@@ -1,0 +1,43 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
+import './Navigation.css';
+
+function Navigation({ currentPage, onNavigate }) {
+  const { t } = useTranslation();
+
+  return (
+    <nav className="navigation">
+      <div className="nav-container">
+        <div className="nav-left">
+          <h1 className="nav-title">{t('treatments_manager')}</h1>
+          <div className="nav-menu">
+            <button 
+              className={`nav-button ${currentPage === 'patients' ? 'active' : ''}`}
+              onClick={() => onNavigate('patients')}
+            >
+              {t('patients')}
+            </button>
+            <button 
+              className={`nav-button ${currentPage === 'add-patient' ? 'active' : ''}`}
+              onClick={() => onNavigate('add-patient')}
+            >
+              {t('add_patient')}
+            </button>
+            <button 
+              className={`nav-button ${currentPage === 'treatments' ? 'active' : ''}`}
+              onClick={() => onNavigate('treatments')}
+            >
+              {t('treatments')}
+            </button>
+          </div>
+        </div>
+        <div className="nav-right">
+          <LanguageSwitcher />
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export default Navigation;
