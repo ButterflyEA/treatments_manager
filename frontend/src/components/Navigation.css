@@ -1,0 +1,136 @@
+.navigation {
+  background-color: #2c3e50;
+  color: white;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+}
+
+.nav-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 1rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-name {
+  color: #ecf0f1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.logout-button {
+  background: #e74c3c;
+  border: none;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.logout-button:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+
+.nav-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ecf0f1;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: #bdc3c7;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.nav-button:hover {
+  background-color: #34495e;
+  color: #ecf0f1;
+}
+
+.nav-button.active {
+  background-color: #3498db;
+  color: white;
+}
+
+/* RTL Support */
+[dir="rtl"] .navigation {
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-container {
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-left {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .nav-center {
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-right {
+  direction: ltr;
+}
+
+[dir="rtl"] .nav-title {
+  text-align: right;
+}
+
+[dir="rtl"] .nav-menu {
+  direction: rtl;
+  gap: 1rem;
+}
+
+[dir="rtl"] .nav-button {
+  text-align: center;
+}

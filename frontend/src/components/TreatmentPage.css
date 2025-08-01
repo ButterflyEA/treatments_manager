@@ -1,0 +1,63 @@
+.treatment-page {
+  min-height: calc(100vh - 80px);
+  background-color: #f8f9fa;
+}
+
+.page-header {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: white !important;
+}
+
+.page-description {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  color: white !important;
+}
+
+/* RTL Support */
+[dir="rtl"] .treatment-page {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .page-header {
+  text-align: center;
+  direction: rtl;
+}
+
+[dir="rtl"] .page-header h1 {
+  text-align: center;
+}
+
+[dir="rtl"] .page-description {
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-header {
+    padding: 2rem 1rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2rem;
+    color: white !important;
+  }
+  
+  .page-description {
+    font-size: 1rem;
+    color: white !important;
+  }
+}
