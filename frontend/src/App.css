@@ -1,0 +1,303 @@
+.App {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* Header with language switcher */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+/* Language switcher */
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.language-switcher label {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 0;
+}
+
+.language-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .form-row {
+  direction: rtl;
+}
+
+[dir="rtl"] .patient-header {
+  direction: rtl;
+}
+
+[dir="rtl"] .patient-actions {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+[dir="rtl"] .btn {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+[dir="rtl"] .btn:last-child {
+  margin-left: 0;
+}
+
+[dir="rtl"] .header {
+  direction: rtl;
+}
+
+[dir="rtl"] .language-switcher {
+  direction: ltr;
+}
+
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+}
+
+[dir="rtl"] .patient-info p {
+  text-align: right;
+}
+
+[dir="rtl"] .message {
+  text-align: right;
+}
+
+/* Hebrew font support */
+[dir="rtl"] {
+  font-family: 'Segoe UI', Tahoma, Arial, Helvetica, sans-serif;
+}
+
+/* Patient Manager Styles */
+.patient-manager {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+h1, h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+textarea {
+  height: 80px;
+  resize: vertical;
+}
+
+/* Button Styles */
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Patient List Styles */
+.patients-grid {
+  display: grid;
+  gap: 15px;
+}
+
+.patient-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  transition: box-shadow 0.3s ease;
+}
+
+.patient-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.patient-info h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.2em;
+}
+
+.patient-info p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.patient-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.patient-actions .btn {
+  margin-right: 0;
+  padding: 8px 16px;
+  font-size: 12px;
+}
+
+/* Message Styles */
+.message {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.message.success {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+/* Loading Styles */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .patient-manager {
+    padding: 10px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .patient-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .patient-actions {
+    margin-top: 15px;
+    justify-content: flex-start;
+  }
+}
