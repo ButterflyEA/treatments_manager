@@ -9,6 +9,22 @@ A Rust backend service using Actix-web for managing patient treatment records.
 - SQLite database with automatic creation
 - Database migrations
 - CORS support for frontend integration
+- Environment-based configuration
+
+## Configuration
+
+The application uses environment variables for configuration. Copy the example environment file and modify as needed:
+
+```bash
+cp .env.example .env
+```
+
+### Environment Variables
+
+- `DATABASE_URL` - SQLite database connection string (default: `sqlite:./patients.db?mode=rwc`)
+- `SERVER_HOST` - Server host (optional, default: 127.0.0.1)
+- `SERVER_PORT` - Server port (optional, default: 8080)
+- `RUST_LOG` - Logging level (optional, default: info)
 
 ## Database Setup
 
@@ -55,11 +71,19 @@ To add new migrations, create new SQL files with incrementing numbers.
 
 ## Running the Application
 
-```bash
-cargo run
-```
+1. Copy the environment configuration:
+   ```bash
+   cp .env.example .env
+   ```
 
-The server starts on `http://127.0.0.1:8080`
+2. (Optional) Modify the `.env` file to customize the database path or other settings
+
+3. Start the server:
+   ```bash
+   cargo run
+   ```
+
+The server starts on `http://127.0.0.1:8080` (or the host/port specified in your `.env` file)
 
 ## Development
 
@@ -67,7 +91,9 @@ The server starts on `http://127.0.0.1:8080`
 
 1. Ensure Rust is installed
 2. Clone the repository
-3. Run `cargo run` - the database will be created automatically
+3. Copy the environment configuration: `cp .env.example .env`
+4. (Optional) Modify the `.env` file for custom settings
+5. Run `cargo run` - the database will be created automatically
 
 ### Database Reset
 
