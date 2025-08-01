@@ -38,6 +38,25 @@ pub struct Claims {
     pub iat: usize,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct CreateUserRequest {
+    pub email: String,
+    pub password: String,
+    pub name: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateUserRequest {
+    pub email: Option<String>,
+    pub name: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ChangePasswordRequest {
+    pub current_password: String,
+    pub new_password: String,
+}
+
 impl From<User> for UserInfo {
     fn from(user: User) -> Self {
         UserInfo {

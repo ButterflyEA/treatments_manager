@@ -26,6 +26,12 @@ function Navigation({ currentPage, onNavigate, user, onLogout }) {
       >
         {t('treatments')}
       </button>
+      <button 
+        className={`nav-button ${currentPage === 'user-management' ? 'active' : ''}`}
+        onClick={() => onNavigate('user-management')}
+      >
+        {t('user_management')}
+      </button>
     </div>
   );
 

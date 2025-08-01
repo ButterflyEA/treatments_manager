@@ -125,7 +125,40 @@ const resources = {
       login: "Login",
       loggingIn: "Logging in...",
       loginError: "Invalid email or password",
-      logout: "Logout"
+      logout: "Logout",
+      
+      // User Management
+      user_management: "User Management",
+      users: "Users",
+      add_user: "Add User",
+      create_new_user: "Create New User",
+      create_user: "Create User",
+      creating: "Creating...",
+      current_user: "Current User",
+      change_password: "Change Password",
+      change_password_for: "Change password for {{name}}",
+      current_password: "Current Password",
+      new_password: "New Password",
+      confirm_new_password: "Confirm New Password",
+      password_min_length: "Password must be at least 6 characters",
+      passwords_do_not_match: "Passwords do not match",
+      save: "Save",
+      back: "Back",
+      
+      // User Management Messages
+      user_created_successfully: "User created successfully",
+      user_updated_successfully: "User updated successfully",
+      user_deleted_successfully: "User deleted successfully",
+      password_changed_successfully: "Password changed successfully",
+      no_changes_made: "No changes were made",
+      confirm_delete_user: "Are you sure you want to delete {{name}}?",
+      
+      // User Management Errors
+      error_loading_users: "Error loading users",
+      error_creating_user: "Error creating user",
+      error_updating_user: "Error updating user",
+      error_deleting_user: "Error deleting user",
+      error_changing_password: "Error changing password"
     }
   },
   he: {
@@ -249,7 +282,40 @@ const resources = {
       login: "התחבר",
       loggingIn: "מתחבר...",
       loginError: "אימייל או סיסמה לא נכונים",
-      logout: "התנתק"
+      logout: "התנתק",
+      
+      // User Management
+      user_management: "ניהול משתמשים",
+      users: "משתמשים",
+      add_user: "הוסף משתמש",
+      create_new_user: "צור משתמש חדש",
+      create_user: "צור משתמש",
+      creating: "יוצר...",
+      current_user: "משתמש נוכחי",
+      change_password: "שנה סיסמה",
+      change_password_for: "שנה סיסמה עבור {{name}}",
+      current_password: "סיסמה נוכחית",
+      new_password: "סיסמה חדשה",
+      confirm_new_password: "אשר סיסמה חדשה",
+      password_min_length: "הסיסמה חייבת להכיל לפחות 6 תווים",
+      passwords_do_not_match: "הסיסמאות אינן תואמות",
+      save: "שמור",
+      back: "חזור",
+      
+      // User Management Messages
+      user_created_successfully: "המשתמש נוצר בהצלחה",
+      user_updated_successfully: "המשתמש עודכן בהצלחה",
+      user_deleted_successfully: "המשתמש נמחק בהצלחה",
+      password_changed_successfully: "הסיסמה שונתה בהצלחה",
+      no_changes_made: "לא בוצעו שינויים",
+      confirm_delete_user: "האם אתה בטוח שברצונך למחוק את {{name}}?",
+      
+      // User Management Errors
+      error_loading_users: "שגיאה בטעינת משתמשים",
+      error_creating_user: "שגיאה ביצירת משתמש",
+      error_updating_user: "שגיאה בעדכון משתמש",
+      error_deleting_user: "שגיאה במחיקת משתמש",
+      error_changing_password: "שגיאה בשינוי סיסמה"
     }
   }
 };

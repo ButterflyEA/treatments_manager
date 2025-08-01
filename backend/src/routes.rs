@@ -34,6 +34,14 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                         web::scope("/treatments")
                             .route("", web::get().to(treatment_handler::get_all_treatments))
                     )
+                    .service(
+                        web::scope("/users")
+                            .route("", web::get().to(auth::get_users))
+                            .route("", web::post().to(auth::create_user))
+                            .route("/{id}", web::put().to(auth::update_user))
+                            .route("/{id}/password", web::put().to(auth::change_password))
+                            .route("/{id}", web::delete().to(auth::delete_user))
+                    )
             )
     );
 }

@@ -7,6 +7,7 @@ import EditPatientPage from './components/EditPatientPage'
 import AddTreatmentPage from './components/AddTreatmentPage'
 import TreatmentPage from './components/TreatmentPage'
 import PatientDetail from './components/PatientDetail'
+import UserManagementPage from './components/UserManagementPage'
 import Login from './components/Login'
 import AuthService from './services/AuthService'
 import './App.css'
@@ -152,6 +153,12 @@ function App() {
         );
       case 'treatments':
         return <TreatmentPage />;
+      case 'user-management':
+        return (
+          <UserManagementPage 
+            onBack={() => handleNavigate('patients')}
+          />
+        );
       case 'patients':
       default:
         return (
