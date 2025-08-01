@@ -47,6 +47,16 @@
   text-align: right;
 }
 
+/* Navigation RTL Support */
+[dir="rtl"] .navigation {
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-container {
+  direction: rtl;
+}
+
+/* Form RTL Support */
 [dir="rtl"] .form-row {
   direction: rtl;
 }
@@ -60,6 +70,7 @@
   margin-left: 0;
 }
 
+/* Button RTL Support */
 [dir="rtl"] .btn {
   margin-left: 10px;
   margin-right: 0;
@@ -73,10 +84,12 @@
   direction: rtl;
 }
 
+/* Language switcher stays LTR in RTL mode */
 [dir="rtl"] .language-switcher {
   direction: ltr;
 }
 
+/* Input fields RTL Support */
 [dir="rtl"] input,
 [dir="rtl"] textarea,
 [dir="rtl"] select {
@@ -94,6 +107,67 @@
 /* Hebrew font support */
 [dir="rtl"] {
   font-family: 'Segoe UI', Tahoma, Arial, Helvetica, sans-serif;
+}
+
+/* Additional RTL Support for better Hebrew experience */
+[dir="rtl"] * {
+  box-sizing: border-box;
+}
+
+[dir="rtl"] .container {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .form-group {
+  text-align: right;
+}
+
+[dir="rtl"] label {
+  text-align: right;
+  display: block;
+}
+
+[dir="rtl"] .modal {
+  direction: rtl;
+}
+
+[dir="rtl"] .modal-header {
+  text-align: right;
+}
+
+[dir="rtl"] .btn-group {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .btn-group .btn {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+[dir="rtl"] .btn-group .btn:first-child {
+  margin-left: 0;
+}
+
+[dir="rtl"] .btn-group .btn:last-child {
+  margin-right: 0.5rem;
+}
+
+/* Table RTL Support */
+[dir="rtl"] table {
+  direction: rtl;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+  text-align: right;
+}
+
+/* List RTL Support */
+[dir="rtl"] ul,
+[dir="rtl"] ol {
+  padding-right: 1rem;
+  padding-left: 0;
 }
 
 /* Patient Manager Styles */

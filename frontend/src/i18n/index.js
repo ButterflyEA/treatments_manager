@@ -208,4 +208,31 @@ i18n
     }
   });
 
+// Handle direction change on language change
+i18n.on('languageChanged', (lng) => {
+  const isRTL = lng === 'he';
+  document.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.lang = lng;
+  
+  // Add class to body for additional styling hooks
+  document.body.className = document.body.className.replace(/\b(rtl|ltr)\b/g, '');
+  document.body.classList.add(isRTL ? 'rtl' : 'ltr');
+});
+
+// Set initial direction
+const setInitialDirection = () => {
+  const currentLang = i18n.language || 'en';
+  const isRTL = currentLang === 'he';
+  document.dir = isRTL ? 'rtl' : 'ltr';
+  document.documentElement.lang = currentLang;
+  document.body.classList.add(isRTL ? 'rtl' : 'ltr');
+};
+
+// Set direction when i18n is ready
+if (i18n.isInitialized) {
+  setInitialDirection();
+} else {
+  i18n.on('initialized', setInitialDirection);
+}
+
 export default i18n;

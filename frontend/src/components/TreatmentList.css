@@ -159,20 +159,46 @@
 }
 
 /* RTL Support */
+[dir="rtl"] .treatment-list {
+  direction: rtl;
+  text-align: right;
+}
+
 [dir="rtl"] .treatment-list-header {
-  flex-direction: row-reverse;
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important; /* Changed from space-between */
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .treatment-list-header h2 {
+  text-align: right;
+  margin: 0;
+  margin-left: auto; /* Push title to the right when there's no button */
+}
+
+[dir="rtl"] .treatment-list-header .btn-primary {
+  direction: ltr; /* Keep button text LTR for readability */
+  margin-right: auto; /* Push button to the left when present */
 }
 
 [dir="rtl"] .treatment-header {
   flex-direction: row-reverse;
+  direction: rtl;
+  text-align: right;
 }
 
 [dir="rtl"] .treatment-date {
-  text-align: left;
+  text-align: right;
 }
 
 [dir="rtl"] .treatment-actions {
   justify-content: flex-start;
+}
+
+[dir="rtl"] .treatment-card {
+  direction: rtl;
+  text-align: right;
 }
 
 /* Responsive */

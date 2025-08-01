@@ -167,3 +167,53 @@
     flex-direction: column;
   }
 }
+
+/* RTL Support for PatientsPage */
+[dir="rtl"] .patients-page {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .page-header {
+  text-align: center;
+  direction: rtl;
+}
+
+[dir="rtl"] .patients-container {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .patients-list-section {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .list-header {
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .list-header h2 {
+  text-align: right;
+  margin: 0;
+  order: 2; /* Ensure title appears on the right */
+}
+
+[dir="rtl"] .btn-refresh,
+[dir="rtl"] .refresh-btn {
+  margin-left: 0;
+  margin-right: 0;
+  direction: ltr; /* Keep button text LTR for readability */
+  order: 1; /* Ensure button appears on the left */
+}
+
+[dir="rtl"] .modal-content {
+  text-align: right;
+}
+
+[dir="rtl"] .message {
+  text-align: center;
+}

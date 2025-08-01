@@ -25,7 +25,21 @@
 }
 
 /* RTL Support */
+[dir="rtl"] .treatment-page {
+  direction: rtl;
+  text-align: right;
+}
+
 [dir="rtl"] .page-header {
+  text-align: center;
+  direction: rtl;
+}
+
+[dir="rtl"] .page-header h1 {
+  text-align: center;
+}
+
+[dir="rtl"] .page-description {
   text-align: center;
 }
 

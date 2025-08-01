@@ -11,8 +11,8 @@
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 1rem 2rem;
 }
@@ -20,7 +20,20 @@
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  justify-self: start;
+}
+
+.nav-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-self: end;
 }
 
 .nav-title {
@@ -57,20 +70,37 @@
   color: white;
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
+/* RTL Support */
+[dir="rtl"] .navigation {
+  direction: rtl;
 }
 
-/* RTL Support */
 [dir="rtl"] .nav-container {
-  flex-direction: row-reverse;
+  direction: rtl;
 }
 
 [dir="rtl"] .nav-left {
-  flex-direction: row-reverse;
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .nav-center {
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-right {
+  direction: ltr;
+}
+
+[dir="rtl"] .nav-title {
+  text-align: right;
 }
 
 [dir="rtl"] .nav-menu {
-  flex-direction: row-reverse;
+  direction: rtl;
+  gap: 1rem;
+}
+
+[dir="rtl"] .nav-button {
+  text-align: center;
 }
