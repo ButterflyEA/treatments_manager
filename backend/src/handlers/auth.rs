@@ -25,8 +25,14 @@ pub async fn login(
     match user_result {
         Ok(Some(user)) => {
             log::info!("User found in database: {}", user.email);
+            log::info!("Input password length: {}", login_data.password.len());
+            log::info!("Stored hash starts with: {}", &user.password_hash[..20]); // Just first 20 chars for debugging
+            
             // Verify password
-            if verify(&login_data.password, &user.password_hash).unwrap_or(false) {
+            let password_matches = verify(&login_data.password, &user.password_hash).unwrap_or(false);
+            log::info!("Password verification result: {}", password_matches);
+            
+            if password_matches {
                 log::info!("Password verification successful for user: {}", user.email);
                 // Create JWT token
                 match JwtUtils::create_token(&user.id, &user.email) {
@@ -47,6 +53,14 @@ pub async fn login(
                 }
             } else {
                 log::warn!("Password verification failed for user: {}", user.email);
+                log::warn!("Input password had {} characters", login_data.password.len());
+                log::warn!("Hash verification returned false");
+                
+                // Additional debugging - check if password contains unusual characters
+                let has_non_ascii = !login_data.password.is_ascii();
+                let has_whitespace = login_data.password.chars().any(|c| c.is_whitespace());
+                log::warn!("Password contains non-ASCII chars: {}, whitespace: {}", has_non_ascii, has_whitespace);
+                
                 Ok(HttpResponse::Unauthorized().json(serde_json::json!({
                     "error": "Invalid credentials"
                 })))
@@ -219,6 +233,12 @@ pub async fn debug_force_create_user(db: web::Data<Database>) -> Result<HttpResp
     println!("📧 Using email: {}", default_email);
     println!("👤 Using name: {}", default_name);
     println!("🔑 Password length: {}", default_password.len());
+    println!("🔑 Password is ASCII: {}", default_password.is_ascii());
+    println!("🔑 Password has whitespace: {}", default_password.chars().any(|c| c.is_whitespace()));
+    
+    // Log the password characters for debugging (REMOVE THIS AFTER FIXING!)
+    println!("🔑 Password first char: '{}'", default_password.chars().next().unwrap_or('?'));
+    println!("🔑 Password last char: '{}'", default_password.chars().last().unwrap_or('?'));
 
     // First, delete any existing user with this email
     match sqlx::query("DELETE FROM users WHERE email = ?")

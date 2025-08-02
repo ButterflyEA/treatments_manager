@@ -15,6 +15,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                     .route("/debug/users", web::get().to(auth::debug_list_users)) // Debug endpoint
                     .route("/debug/env", web::get().to(auth::debug_env_vars)) // Environment debug
                     .route("/debug/force-create", web::post().to(auth::debug_force_create_user)) // Force create user
+                    .route("/debug/password", web::get().to(auth::debug_show_password)) // TEMPORARY: Show password
             )
             .service(
                 web::scope("/v1")
