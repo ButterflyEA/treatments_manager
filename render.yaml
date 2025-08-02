@@ -1,0 +1,46 @@
+# Render Blueprint for Treatment Manager
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: treatments-manager
+    env: rust
+    buildCommand: |
+      # Build frontend
+      cd frontend && npm ci && npm run build
+      # Build backend (Rust)
+      cd ../backend && cargo build --release
+    startCommand: cd backend && ./target/release/backend
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: RUST_LOG
+        value: info
+      - key: SERVER_HOST
+        value: 0.0.0.0
+      - key: DATABASE_URL
+        value: sqlite:./patients.db?mode=rwc
+      - key: JWT_SECRET
+        generateValue: true  # Render will generate a secure secret
+      - key: DEFAULT_ADMIN_EMAIL
+        value: admin@treatments.com
+      - key: DEFAULT_ADMIN_PASSWORD
+        generateValue: true  # Render will generate a secure password
+      - key: DEFAULT_ADMIN_NAME
+        value: Treatment Administrator
+      # Add your GitHub token manually in Render dashboard
+      # - key: GITHUB_TOKEN
+      #   value: your_github_token_here
+      # - key: GITHUB_REPO
+      #   value: ButterflyEA/treatments_manager
+    healthCheckPath: /api/v1/github/health
+    disk:
+      name: treatments-data
+      mountPath: /data
+      sizeGB: 5  # For SQLite database persistence in /data folder
+
+# Optional: Add PostgreSQL database
+# databases:
+#   - name: treatments-db
+#     databaseName: treatments_manager
+#     user: treatments_user

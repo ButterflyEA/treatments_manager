@@ -7,6 +7,7 @@ mod middleware;
 
 use actix_web::{web, App, HttpServer, middleware::Logger};
 use actix_cors::Cors;
+use actix_files::Files;
 use env_logger;
 use dotenv::dotenv;
 use std::env;
@@ -37,8 +38,37 @@ async fn main() -> std::io::Result<()> {
     
     let db_data = web::Data::new(db);
 
-    println!("🚀 Starting Treatment Manager Backend Server on http://127.0.0.1:8080");
+    // Configure host and port based on environment
+    let host = env::var("SERVER_HOST")
+        .unwrap_or_else(|_| {
+            // Auto-detect environment
+            if env::var("RUST_LOG").unwrap_or_default() == "debug" || 
+               env::var("NODE_ENV").unwrap_or_default() == "development" ||
+               env::var("ENVIRONMENT").unwrap_or_default() == "development" {
+                "127.0.0.1".to_string()  // Development: localhost only
+            } else {
+                "0.0.0.0".to_string()    // Production: accept external connections
+            }
+        });
+    
+    let port = env::var("PORT")  // Render sets this automatically
+        .or_else(|_| env::var("SERVER_PORT"))
+        .unwrap_or_else(|_| "8080".to_string())
+        .parse::<u16>()
+        .unwrap_or(8080);
+    
+    let bind_address = format!("{}:{}", host, port);
+    let server_url = if host == "0.0.0.0" {
+        format!("http://0.0.0.0:{} (external access enabled)", port)
+    } else {
+        format!("http://{}:{}", host, port)
+    };
+
+    println!("🚀 Starting Treatment Manager Backend Server on {}", server_url);
     println!("📊 Database: {}", database_url);
+    println!("🌐 Frontend: Serving static files from ./static");
+    println!("🏠 Environment: {}", if host == "127.0.0.1" { "Development (localhost only)" } else { "Production (external access)" });
+    println!("📝 GitHub Issues: {}", if std::env::var("GITHUB_TOKEN").is_ok() { "✅ Configured" } else { "❌ Not configured" });
 
     HttpServer::new(move || {
         let cors = Cors::default()
@@ -52,9 +82,18 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .wrap(Logger::default())
             .configure(configure_routes)
-            .route("/", web::get().to(|| async { "Treatment Manager API is running!" }))
+            // Serve static files (frontend)
+            .service(Files::new("/", "./static").index_file("index.html"))
+            // Fallback route for SPA (Single Page Application)
+            .default_service(
+                web::route()
+                    .guard(actix_web::guard::Not(actix_web::guard::Header("content-type", "application/json")))
+                    .to(|| async {
+                        actix_files::NamedFile::open("./static/index.html")
+                    })
+            )
     })
-    .bind("127.0.0.1:8080")?
+    .bind(&bind_address)?
     .run()
     .await
 }

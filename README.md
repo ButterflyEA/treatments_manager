@@ -1,16 +1,71 @@
-# Treatment Manager - Patient Management System
+# Treatment Manager 🏥
 
-A web application for managing patient treatments with a Rust backend (Actix-web) and HTML/JavaScript frontend.
+A comprehensive patient and treatment management system with a React frontend served by a Rust backend.
 
-## Features
+## Features ✨
 
-- **Patient Management**: Full CRUD operations for patient records
-- **Patient Information**: Store name, email, phone number, description, and date
-- **RESTful API**: Clean API endpoints for all operations
-- **SQLite Database**: Persistent data storage with SQLite
-- **Database Migrations**: Automatic database schema management
-- **Internationalization**: Support for English and Hebrew languages with RTL layout
-- **Modern Frontend**: React with Vite for fast development and hot reloading
+- **Patient Management**: Add, edit, view, and delete patient records
+- **Treatment Tracking**: Record and manage patient treatments
+- **User Management**: Multi-user support with JWT authentication
+- **Issue Reporting**: Built-in GitHub integration for bug reports and feature requests
+- **Internationalization**: Full support for English and Hebrew (RTL)
+- **Single Binary Deployment**: Frontend is served by the backend
+- **Responsive Design**: Works on desktop and mobile devices
+
+## Quick Start 🚀
+
+### Prerequisites
+
+- **Node.js** (v16 or higher) - for building frontend
+- **Rust** (latest stable) - for backend
+- **Git**
+
+### Installation & Build
+
+1. **Clone and setup**:
+   ```bash
+   git clone https://github.com/ButterflyEA/treatments_manager.git
+   cd treatments_manager
+   cd frontend && npm install && cd ..
+   ```
+
+2. **Configure environment**:
+   ```bash
+   cd backend
+   cp .env.example .env
+   # Edit .env file with your settings
+   ```
+
+3. **Build everything**:
+   
+   **Windows**:
+   ```cmd
+   build.bat
+   ```
+   
+   **Linux/macOS**:
+   ```bash
+   chmod +x build.sh && ./build.sh
+   ```
+
+4. **Run the application**:
+   ```bash
+   cd backend
+   cargo run --release
+   ```
+
+5. **Access at**: http://127.0.0.1:8080
+   - **Login**: `admin@treatments.com` / `admin123`
+
+## Architecture 🏗️
+
+The application uses a **single-server architecture** where the Rust backend serves both the API and the built React frontend:
+
+```
+Frontend (React) → Build → backend/static/ → Served by Rust backend
+                     ↓
+API Requests → Rust Backend (Actix-web) → SQLite Database
+```
 
 ## Project Structure
 

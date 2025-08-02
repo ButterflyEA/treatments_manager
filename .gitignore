@@ -18,6 +18,15 @@ target
 *.db-shm
 *.db-wal
 
+# Environment files with secrets
+.env
+.env.local
+.env.production
+render.env
+
+# But include example files
+!.env.example
+
 # Environment variables
 .env
 .env.local
