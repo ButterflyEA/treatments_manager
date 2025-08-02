@@ -273,7 +273,15 @@ pub async fn debug_force_create_user(db: web::Data<Database>) -> Result<HttpResp
                 "success": true,
                 "message": "Default user force created",
                 "email": default_email,
-                "name": default_name
+                "name": default_name,
+                "debug_info": {
+                    "password_length": default_password.len(),
+                    "password_is_ascii": default_password.is_ascii(),
+                    "password_has_whitespace": default_password.chars().any(|c| c.is_whitespace()),
+                    "password_first_char": default_password.chars().next().unwrap_or('?').to_string(),
+                    "password_last_char": default_password.chars().last().unwrap_or('?').to_string(),
+                    "password_preview": if default_password.len() > 0 { format!("{}***{}", &default_password[0..1], &default_password[default_password.len()-1..]) } else { "EMPTY".to_string() }
+                }
             })))
         }
         Err(e) => {
