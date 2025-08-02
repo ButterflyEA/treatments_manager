@@ -632,3 +632,62 @@ pub async fn debug_test_password_verification(db: web::Data<Database>) -> Result
         }
     }
 }
+
+#[allow(dead_code)]
+pub async fn debug_test_multiple_passwords(db: web::Data<Database>) -> Result<HttpResponse, Error> {
+    let default_email = env::var("DEFAULT_ADMIN_EMAIL").unwrap_or_default();
+    
+    // Get user from database
+    let user_result = sqlx::query_as::<_, User>(
+        "SELECT id, email, password_hash, name, created_at FROM users WHERE email = ?",
+    )
+    .bind(&default_email)
+    .fetch_one(db.pool())
+    .await;
+    
+    match user_result {
+        Ok(user) => {
+            // Test multiple password variations
+            let test_passwords = vec![
+                "admin123!",
+                "admin123",
+                "Admin123!",
+                "Admin123",
+                "ADMIN123!",
+                "ADMIN123",
+                "admin",
+                "password",
+                "123456",
+                "admin@123",
+            ];
+            
+            let mut results = Vec::new();
+            
+            for password in test_passwords {
+                let verification_result = verify(password, &user.password_hash).unwrap_or(false);
+                results.push(serde_json::json!({
+                    "password": password,
+                    "matches": verification_result
+                }));
+                
+                if verification_result {
+                    println!("=== FOUND MATCHING PASSWORD ===");
+                    println!("Password: '{}'", password);
+                    println!("Hash: {}", user.password_hash);
+                }
+            }
+            
+            Ok(HttpResponse::Ok().json(serde_json::json!({
+                "email": user.email,
+                "hash_preview": &user.password_hash[0..20],
+                "test_results": results
+            })))
+        },
+        Err(e) => {
+            println!("User not found: {:?}", e);
+            Ok(HttpResponse::NotFound().json(serde_json::json!({
+                "error": "User not found"
+            })))
+        }
+    }
+}
