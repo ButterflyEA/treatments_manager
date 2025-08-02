@@ -27,8 +27,8 @@ impl Database {
     pub async fn create_patient(&self, patient: &Patient) -> Result<()> {
         sqlx::query(
             r#"
-            INSERT INTO patients (id, name, email, phone_number, description, date)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO patients (id, name, email, phone_number, description, date, active)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             "#
         )
         .bind(patient.id.to_string())
@@ -37,6 +37,7 @@ impl Database {
         .bind(&patient.phone_number)
         .bind(&patient.description)
         .bind(patient.date.to_rfc3339())
+        .bind(patient.active)
         .execute(&self.pool)
         .await?;
 
@@ -45,7 +46,7 @@ impl Database {
 
     pub async fn get_all_patients(&self) -> Result<Vec<Patient>> {
         let rows = sqlx::query(
-            "SELECT id, name, email, phone_number, description, date FROM patients ORDER BY date DESC"
+            "SELECT id, name, email, phone_number, description, date, active FROM patients ORDER BY date DESC"
         )
         .fetch_all(&self.pool)
         .await?;
@@ -58,6 +59,7 @@ impl Database {
             let phone_number: String = row.get("phone_number");
             let description: String = row.get("description");
             let date_str: String = row.get("date");
+            let active: bool = row.get("active");
 
             let patient = Patient {
                 id: Uuid::parse_str(&id_str)?,
@@ -66,6 +68,7 @@ impl Database {
                 phone_number,
                 description,
                 date: DateTime::parse_from_rfc3339(&date_str)?.with_timezone(&Utc),
+                active,
             };
             patients.push(patient);
         }
@@ -75,7 +78,7 @@ impl Database {
 
     pub async fn get_patient_by_id(&self, id: Uuid) -> Result<Option<Patient>> {
         let row = sqlx::query(
-            "SELECT id, name, email, phone_number, description, date FROM patients WHERE id = ?"
+            "SELECT id, name, email, phone_number, description, date, active FROM patients WHERE id = ?"
         )
         .bind(id.to_string())
         .fetch_optional(&self.pool)
@@ -88,6 +91,7 @@ impl Database {
             let phone_number: String = row.get("phone_number");
             let description: String = row.get("description");
             let date_str: String = row.get("date");
+            let active: bool = row.get("active");
 
             let patient = Patient {
                 id: Uuid::parse_str(&id_str)?,
@@ -96,6 +100,7 @@ impl Database {
                 phone_number,
                 description,
                 date: DateTime::parse_from_rfc3339(&date_str)?.with_timezone(&Utc),
+                active,
             };
             Ok(Some(patient))
         } else {
@@ -107,7 +112,7 @@ impl Database {
         let result = sqlx::query(
             r#"
             UPDATE patients 
-            SET name = ?, email = ?, phone_number = ?, description = ?, date = ?
+            SET name = ?, email = ?, phone_number = ?, description = ?, date = ?, active = ?
             WHERE id = ?
             "#
         )
@@ -116,6 +121,7 @@ impl Database {
         .bind(&patient.phone_number)
         .bind(&patient.description)
         .bind(patient.date.to_rfc3339())
+        .bind(patient.active)
         .bind(id.to_string())
         .execute(&self.pool)
         .await?;

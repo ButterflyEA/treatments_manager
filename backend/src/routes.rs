@@ -15,6 +15,8 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                     .route("/debug/users", web::get().to(auth::debug_list_users)) // Debug endpoint
                     .route("/debug/env", web::get().to(auth::debug_env_vars)) // Environment debug
                     .route("/debug/force-create", web::post().to(auth::debug_force_create_user)) // Force create user
+                    .route("/debug/test-password", web::get().to(auth::debug_test_password_verification)) // Test password verification
+                    .route("/debug/test-multiple", web::get().to(auth::debug_test_multiple_passwords)) // Test multiple passwords
             )
             .service(
                 web::scope("/v1")
@@ -26,6 +28,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                             .route("/{id}", web::get().to(patient_handler::get_patient_by_id))
                             .route("/{id}", web::put().to(patient_handler::update_patient))
                             .route("/{id}", web::delete().to(patient_handler::delete_patient))
+                            .route("/{id}/toggle-status", web::patch().to(patient_handler::toggle_patient_status))
                             
                             // Treatment routes nested under patients
                             .route("/{id}/treatments", web::post().to(treatment_handler::create_treatment))

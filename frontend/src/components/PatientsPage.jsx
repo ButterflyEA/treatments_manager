@@ -9,6 +9,7 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showInactivePatients, setShowInactivePatients] = useState(true);
   const [message, setMessage] = useState({ text: '', type: '' });
   const [loading, setLoading] = useState(false);
 
@@ -16,17 +17,24 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
     loadPatients();
   }, []);
 
-  // Filter patients when search term or patients list changes
+  // Filter patients when search term, patients list, or show inactive toggle changes
   useEffect(() => {
-    if (!searchTerm.trim()) {
-      setFilteredPatients(patients);
-    } else {
-      const filtered = patients.filter(patient =>
+    let filtered = patients;
+    
+    // Filter by active status
+    if (!showInactivePatients) {
+      filtered = filtered.filter(patient => patient.active !== false);
+    }
+    
+    // Filter by search term
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(patient =>
         patient.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredPatients(filtered);
     }
-  }, [patients, searchTerm]);
+    
+    setFilteredPatients(filtered);
+  }, [patients, searchTerm, showInactivePatients]);
 
   const loadPatients = async () => {
     try {
@@ -68,6 +76,19 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
     }
   };
 
+  const handleToggleStatus = async (patientId) => {
+    try {
+      setLoading(true);
+      await patientService.toggleStatus(patientId);
+      showMessage(t('statusUpdated'), 'success');
+      loadPatients();
+    } catch (error) {
+      showMessage(`${t('errorUpdating')}: ${error.message}`, 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="patients-page">
       <div className="page-header">
@@ -87,23 +108,36 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
           <div className="list-header">
             <h2>{t('patientsList')}</h2>
             <div className="list-controls">
-              <div className="search-container">
-                <input
-                  type="text"
-                  placeholder={t('searchPatients')}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-input"
-                />
-                {searchTerm && (
-                  <button
-                    className="btn-clear-filter"
-                    onClick={() => setSearchTerm('')}
-                    title={t('clearFilterBtn')}
-                  >
-                    ×
-                  </button>
-                )}
+              <div className="filter-controls">
+                <div className="search-container">
+                  <input
+                    type="text"
+                    placeholder={t('searchPatients')}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                  />
+                  {searchTerm && (
+                    <button
+                      className="btn-clear-filter"
+                      onClick={() => setSearchTerm('')}
+                      title={t('clearFilterBtn')}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+                <div className="checkbox-filter">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={showInactivePatients}
+                      onChange={(e) => setShowInactivePatients(e.target.checked)}
+                      className="checkbox-input"
+                    />
+                    <span className="checkbox-text">{t('showInactivePatients')}</span>
+                  </label>
+                </div>
               </div>
               <button 
                 className="btn-refresh" 
@@ -125,6 +159,7 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
               onEdit={handleEditPatient}
               onDelete={handleDeletePatient}
               onViewDetails={onViewPatientDetails}
+              onToggleStatus={handleToggleStatus}
               loading={loading}
             />
           )}

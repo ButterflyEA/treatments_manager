@@ -10,6 +10,7 @@ pub struct Patient {
     pub phone_number: String,
     pub description: String,
     pub date: DateTime<Utc>,
+    pub active: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -28,6 +29,7 @@ pub struct UpdatePatientRequest {
     pub phone_number: Option<String>,
     pub description: Option<String>,
     pub date: Option<DateTime<Utc>>,
+    pub active: Option<bool>,
 }
 
 impl Patient {
@@ -39,6 +41,7 @@ impl Patient {
             phone_number,
             description,
             date: date.unwrap_or_else(Utc::now),
+            active: true, // New patients are active by default
         }
     }
 
@@ -57,6 +60,9 @@ impl Patient {
         }
         if let Some(date) = update_req.date {
             self.date = date;
+        }
+        if let Some(active) = update_req.active {
+            self.active = active;
         }
     }
 }

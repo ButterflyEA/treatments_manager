@@ -10,6 +10,7 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEdi
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [treatmentListKey, setTreatmentListKey] = useState(0);
+  const [statusLoading, setStatusLoading] = useState(false);
 
   useEffect(() => {
     loadPatient();
@@ -37,6 +38,23 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEdi
   const handleAddTreatment = () => {
     if (onAddTreatment) {
       onAddTreatment(patientId);
+    }
+  };
+
+  const handleToggleStatus = async () => {
+    try {
+      setStatusLoading(true);
+      await patientService.toggleStatus(patientId);
+      // Reload patient data to get updated status
+      await loadPatient();
+      if (onPatientUpdated) {
+        onPatientUpdated();
+      }
+    } catch (err) {
+      setError(t('errorUpdating') + ': ' + err.message);
+      console.error('Error toggling patient status:', err);
+    } finally {
+      setStatusLoading(false);
     }
   };
 
@@ -79,7 +97,32 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEdi
       </div>
 
       <div className="patient-info-section">
-        <h1 className="patient-name">{patient.name}</h1>
+        <div className="patient-header-info">
+          <h1 className="patient-name">
+            {patient.name}
+            <span className={`status-badge ${patient.active ? 'active' : 'inactive'}`}>
+              {patient.active ? t('active') : t('inactive')}
+            </span>
+          </h1>
+          {patient.active && (
+            <button
+              className="btn-close-file"
+              onClick={handleToggleStatus}
+              disabled={statusLoading}
+            >
+              {statusLoading ? t('loading') : t('closeFile')}
+            </button>
+          )}
+          {!patient.active && (
+            <button
+              className="btn-reopen-file"
+              onClick={handleToggleStatus}
+              disabled={statusLoading}
+            >
+              {statusLoading ? t('loading') : t('reopenFile')}
+            </button>
+          )}
+        </div>
         <div className="patient-details-grid">
           <div className="detail-item">
             <label>{t('email')}</label>

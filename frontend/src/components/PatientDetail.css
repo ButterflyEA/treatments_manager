@@ -78,6 +78,58 @@
   color: #2c3e50;
   font-size: 2rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.patient-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.btn-close-file {
+  background-color: #ffc107;
+  color: #212529;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.btn-close-file:hover {
+  background-color: #e0a800;
+}
+
+.btn-close-file:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-reopen-file {
+  background-color: #17a2b8;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.btn-reopen-file:hover {
+  background-color: #138496;
+}
+
+.btn-reopen-file:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .patient-details-grid {

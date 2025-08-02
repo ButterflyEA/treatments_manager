@@ -24,6 +24,8 @@ const resources = {
       updatePatientBtn: "Update Patient",
       editBtn: "Edit",
       deleteBtn: "Delete",
+      closeFile: "Close File",
+      reopenFile: "Reopen File",
       edit: "Edit",
       delete: "Delete",
       cancelBtn: "Cancel",
@@ -32,9 +34,14 @@ const resources = {
       saveBtn: "Save",
       clearFilterBtn: "Clear Filter",
       
+      // Status
+      active: "Active",
+      inactive: "Inactive",
+      
       // Search and Filter
       searchPatients: "Search patients by name...",
       filterByName: "Filter by Name",
+      showInactivePatients: "Show inactive patients",
       noMatchingPatients: "No patients found matching your search.",
       searchTreatments: "Search by patient name or treatment details...",
       filterTreatments: "Filter Treatments",
@@ -49,6 +56,7 @@ const resources = {
       patientCreated: "Patient created successfully!",
       patientUpdated: "Patient updated successfully!",
       patientDeleted: "Patient deleted successfully!",
+      statusUpdated: "Patient status updated successfully!",
       deleteConfirm: "Are you sure you want to delete this patient?",
       loadingPatients: "Loading patients...",
       savingPatient: "Saving...",
@@ -212,6 +220,8 @@ const resources = {
       updatePatientBtn: "עדכן מטופל",
       editBtn: "ערוך",
       deleteBtn: "מחק",
+      closeFile: "סגור תיק",
+      reopenFile: "פתח תיק מחדש",
       edit: "ערוך",
       delete: "מחק",
       cancelBtn: "בטל",
@@ -220,9 +230,14 @@ const resources = {
       saveBtn: "שמור",
       clearFilterBtn: "נקה סינון",
       
+      // Status
+      active: "פעיל",
+      inactive: "לא פעיל",
+      
       // Search and Filter
       searchPatients: "חפש מטופלים לפי שם...",
       filterByName: "סנן לפי שם",
+      showInactivePatients: "הצג מטופלים לא פעילים",
       noMatchingPatients: "לא נמצאו מטופלים התואמים לחיפוש שלך.",
       searchTreatments: "חפש לפי שם מטופל או פרטי טיפול...",
       filterTreatments: "סנן טיפולים",
@@ -237,6 +252,7 @@ const resources = {
       patientCreated: "המטופל נוצר בהצלחה!",
       patientUpdated: "המטופל עודכן בהצלחה!",
       patientDeleted: "המטופל נמחק בהצלחה!",
+      statusUpdated: "סטטוס המטופל עודכן בהצלחה!",
       deleteConfirm: "האם אתה בטוח שברצונך למחוק את המטופל הזה?",
       loadingPatients: "טוען מטופלים...",
       savingPatient: "שומר...",

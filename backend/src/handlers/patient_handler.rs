@@ -129,3 +129,44 @@ pub async fn delete_patient(
         }
     }
 }
+
+pub async fn toggle_patient_status(
+    path: web::Path<Uuid>,
+    db: web::Data<Database>,
+) -> Result<HttpResponse> {
+    let patient_id = path.into_inner();
+
+    // First get the current patient
+    match db.get_patient_by_id(patient_id).await {
+        Ok(Some(mut patient)) => {
+            // Toggle the active status
+            patient.active = !patient.active;
+
+            // Update the patient in the database
+            match db.update_patient(patient_id, &patient).await {
+                Ok(true) => Ok(HttpResponse::Ok().json(json!({
+                    "message": format!("Patient status changed to {}", if patient.active { "active" } else { "inactive" }),
+                    "patient": patient
+                }))),
+                Ok(false) => Ok(HttpResponse::NotFound().json(json!({
+                    "error": "Patient not found"
+                }))),
+                Err(e) => {
+                    eprintln!("Database error: {e}");
+                    Ok(HttpResponse::InternalServerError().json(json!({
+                        "error": "Failed to update patient status"
+                    })))
+                }
+            }
+        },
+        Ok(None) => Ok(HttpResponse::NotFound().json(json!({
+            "error": "Patient not found"
+        }))),
+        Err(e) => {
+            eprintln!("Database error: {e}");
+            Ok(HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to retrieve patient"
+            })))
+        }
+    }
+}

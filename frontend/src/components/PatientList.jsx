@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PatientList = ({ patients, onEdit, onDelete, onViewDetails, loading }) => {
+const PatientList = ({ patients, onEdit, onDelete, onViewDetails, onToggleStatus, loading }) => {
   const { t } = useTranslation();
 
   if (loading) {
@@ -27,10 +27,15 @@ const PatientList = ({ patients, onEdit, onDelete, onViewDetails, loading }) => 
   return (
     <div className="patients-grid">
       {patients.map((patient) => (
-        <div key={patient.id} className="patient-card">
+        <div key={patient.id} className={`patient-card ${!patient.active ? 'inactive' : ''}`}>
           <div className="patient-header">
             <div className="patient-info">
-              <h3>{patient.name}</h3>
+              <h3>
+                {patient.name}
+                <span className={`status-badge ${patient.active ? 'active' : 'inactive'}`}>
+                  {patient.active ? t('active') : t('inactive')}
+                </span>
+              </h3>
               <p><strong>{t('email')}:</strong> {patient.email}</p>
               <p><strong>{t('phoneNumber')}:</strong> {patient.phone_number}</p>
               <p><strong>{t('date')}:</strong> {formatDate(patient.date)}</p>
@@ -49,6 +54,14 @@ const PatientList = ({ patients, onEdit, onDelete, onViewDetails, loading }) => 
               >
                 {t('editBtn')}
               </button>
+              {patient.active && (
+                <button 
+                  className="btn btn-warning"
+                  onClick={() => onToggleStatus(patient.id)}
+                >
+                  {t('closeFile')}
+                </button>
+              )}
               <button 
                 className="btn btn-danger"
                 onClick={() => onDelete(patient.id)}
