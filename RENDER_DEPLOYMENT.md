@@ -55,9 +55,11 @@ DATABASE_URL=sqlite:/data/patients.db?mode=rwc
 
 # CRITICAL: Generate new values for production
 JWT_SECRET=[Generate with: openssl rand -base64 64]
-DEFAULT_ADMIN_EMAIL=admin@yourcompany.com
+
+# Default Admin User - CHANGE THESE!
+DEFAULT_ADMIN_EMAIL=your-email@company.com
 DEFAULT_ADMIN_PASSWORD=[Generate secure password]
-DEFAULT_ADMIN_NAME=Treatment Administrator
+DEFAULT_ADMIN_NAME=Your Name
 
 # Optional: GitHub Integration
 GITHUB_TOKEN=[Your GitHub Personal Access Token]
@@ -101,17 +103,33 @@ Health Check Path: /api/v1/github/health
 ## Troubleshooting
 
 ### Common Issues:
-1. **Build Failures**
+
+1. **"Invalid email or password" on first login**
+   - **Cause**: Default user not created or environment variables not set correctly
+   - **Solution**: 
+     - Check Render logs for user creation messages
+     - Visit `https://your-app.onrender.com/api/auth/debug/users` to see if any users exist
+     - Verify environment variables are set correctly in Render dashboard
+     - Ensure `DEFAULT_ADMIN_EMAIL` and `DEFAULT_ADMIN_PASSWORD` match what you're trying to login with
+
+2. **No styles visible (CSS not loading)**
+   - **Cause**: Static files not being served correctly
+   - **Solution**: 
+     - Check that frontend built correctly in build logs
+     - Verify `/assets/` files are accessible
+     - Check browser dev tools for 404 errors on CSS/JS files
+
+3. **Build Failures**
    - Check Node.js version compatibility
    - Verify Rust version requirements
    - Review build logs in Render dashboard
 
-2. **Runtime Errors**
+4. **Runtime Errors**
    - Check environment variables
    - Review application logs
    - Verify database permissions
 
-3. **Frontend Not Loading**
+5. **Frontend Not Loading**
    - Ensure static files are built correctly
    - Check file paths in build output
 

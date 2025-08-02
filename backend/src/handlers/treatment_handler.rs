@@ -19,20 +19,20 @@ pub async fn create_treatment(
                 id: Uuid::new_v4(),
                 patient_id,
                 summary: body.summary.clone(),
-                date: body.date.unwrap_or_else(|| chrono::Utc::now()),
+                date: body.date.unwrap_or_else(chrono::Utc::now),
             };
 
             match data.create_treatment(&new_treatment).await {
                 Ok(_) => Ok(HttpResponse::Created().json(&new_treatment)),
                 Err(e) => {
-                    eprintln!("Failed to create treatment: {}", e);
+                    eprintln!("Failed to create treatment: {e}");
                     Ok(HttpResponse::InternalServerError().json("Failed to create treatment"))
                 }
             }
         }
         Ok(None) => Ok(HttpResponse::NotFound().json("Patient not found")),
         Err(e) => {
-            eprintln!("Failed to check patient: {}", e);
+            eprintln!("Failed to check patient: {e}");
             Ok(HttpResponse::InternalServerError().json("Failed to check patient"))
         }
     }
@@ -47,7 +47,7 @@ pub async fn get_treatments_for_patient(
     match data.get_treatments_for_patient(patient_id).await {
         Ok(treatments) => Ok(HttpResponse::Ok().json(treatments)),
         Err(e) => {
-            eprintln!("Failed to fetch treatments: {}", e);
+            eprintln!("Failed to fetch treatments: {e}");
             Ok(HttpResponse::InternalServerError().json("Failed to fetch treatments"))
         }
     }
@@ -57,7 +57,7 @@ pub async fn get_all_treatments(data: web::Data<Database>) -> ActixResult<HttpRe
     match data.get_all_treatments().await {
         Ok(treatments) => Ok(HttpResponse::Ok().json(treatments)),
         Err(e) => {
-            eprintln!("Failed to fetch treatments: {}", e);
+            eprintln!("Failed to fetch treatments: {e}");
             Ok(HttpResponse::InternalServerError().json("Failed to fetch treatments"))
         }
     }
@@ -80,7 +80,7 @@ pub async fn get_treatment_by_id(
         }
         Ok(None) => Ok(HttpResponse::NotFound().json("Treatment not found")),
         Err(e) => {
-            eprintln!("Failed to fetch treatment: {}", e);
+            eprintln!("Failed to fetch treatment: {e}");
             Ok(HttpResponse::InternalServerError().json("Failed to fetch treatment"))
         }
     }
@@ -111,14 +111,14 @@ pub async fn update_treatment(
                 Ok(true) => Ok(HttpResponse::Ok().json(&updated_treatment)),
                 Ok(false) => Ok(HttpResponse::NotFound().json("Treatment not found")),
                 Err(e) => {
-                    eprintln!("Failed to update treatment: {}", e);
+                    eprintln!("Failed to update treatment: {e}");
                     Ok(HttpResponse::InternalServerError().json("Failed to update treatment"))
                 }
             }
         }
         Ok(None) => Ok(HttpResponse::NotFound().json("Treatment not found")),
         Err(e) => {
-            eprintln!("Failed to fetch treatment: {}", e);
+            eprintln!("Failed to fetch treatment: {e}");
             Ok(HttpResponse::InternalServerError().json("Failed to fetch treatment"))
         }
     }
@@ -141,14 +141,14 @@ pub async fn delete_treatment(
                 Ok(true) => Ok(HttpResponse::NoContent().finish()),
                 Ok(false) => Ok(HttpResponse::NotFound().json("Treatment not found")),
                 Err(e) => {
-                    eprintln!("Failed to delete treatment: {}", e);
+                    eprintln!("Failed to delete treatment: {e}");
                     Ok(HttpResponse::InternalServerError().json("Failed to delete treatment"))
                 }
             }
         }
         Ok(None) => Ok(HttpResponse::NotFound().json("Treatment not found")),
         Err(e) => {
-            eprintln!("Failed to fetch treatment: {}", e);
+            eprintln!("Failed to fetch treatment: {e}");
             Ok(HttpResponse::InternalServerError().json("Failed to fetch treatment"))
         }
     }

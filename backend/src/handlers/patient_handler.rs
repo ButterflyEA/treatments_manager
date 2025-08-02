@@ -23,10 +23,8 @@ pub async fn create_patient(
             "patient": patient
         }))),
         Err(e) => {
-            eprintln!("Database error: {}", e);
-            Ok(HttpResponse::InternalServerError().json(json!({
-                "error": "Failed to create patient"
-            })))
+            eprintln!("Database error: {e}");
+            Ok(HttpResponse::InternalServerError().json("Failed to create patient"))
         }
     }
 }
@@ -40,7 +38,7 @@ pub async fn get_all_patients(
             "count": patients.len()
         }))),
         Err(e) => {
-            eprintln!("Database error: {}", e);
+            eprintln!("Database error: {e}");
             Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to fetch patients"
             })))
@@ -60,7 +58,7 @@ pub async fn get_patient_by_id(
             "error": "Patient not found"
         }))),
         Err(e) => {
-            eprintln!("Database error: {}", e);
+            eprintln!("Database error: {e}");
             Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to fetch patient"
             })))
@@ -82,7 +80,7 @@ pub async fn update_patient(
             "error": "Patient not found"
         }))),
         Err(e) => {
-            eprintln!("Database error: {}", e);
+            eprintln!("Database error: {e}");
             return Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to fetch patient"
             })));
@@ -102,7 +100,7 @@ pub async fn update_patient(
             "error": "Patient not found"
         }))),
         Err(e) => {
-            eprintln!("Database error: {}", e);
+            eprintln!("Database error: {e}");
             Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to update patient"
             })))
@@ -124,7 +122,7 @@ pub async fn delete_patient(
             "error": "Patient not found"
         }))),
         Err(e) => {
-            eprintln!("Database error: {}", e);
+            eprintln!("Database error: {e}");
             Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to delete patient"
             })))

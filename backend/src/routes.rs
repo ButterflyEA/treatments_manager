@@ -12,6 +12,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                 web::scope("/auth")
                     .route("/login", web::post().to(auth::login))
                     .route("/verify/{token}", web::get().to(auth::verify_token))
+                    .route("/debug/users", web::get().to(auth::debug_list_users)) // Debug endpoint
             )
             .service(
                 web::scope("/v1")

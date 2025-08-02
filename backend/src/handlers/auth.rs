@@ -12,6 +12,8 @@ pub async fn login(
     db: web::Data<Database>,
     login_data: web::Json<LoginRequest>,
 ) -> Result<HttpResponse> {
+    log::info!("Login attempt for email: {}", login_data.email);
+    
     // Check if user exists
     let user_result = sqlx::query_as::<_, User>(
         "SELECT id, email, password_hash, name, created_at FROM users WHERE email = ?",
@@ -22,8 +24,10 @@ pub async fn login(
 
     match user_result {
         Ok(Some(user)) => {
+            log::info!("User found in database: {}", user.email);
             // Verify password
             if verify(&login_data.password, &user.password_hash).unwrap_or(false) {
+                log::info!("Password verification successful for user: {}", user.email);
                 // Create JWT token
                 match JwtUtils::create_token(&user.id, &user.email) {
                     Ok(token) => {
@@ -42,17 +46,24 @@ pub async fn login(
                     }))),
                 }
             } else {
+                log::warn!("Password verification failed for user: {}", user.email);
                 Ok(HttpResponse::Unauthorized().json(serde_json::json!({
                     "error": "Invalid credentials"
                 })))
             }
         }
-        Ok(None) => Ok(HttpResponse::Unauthorized().json(serde_json::json!({
-            "error": "Invalid credentials"
-        }))),
-        Err(_) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({
-            "error": "Database error"
-        }))),
+        Ok(None) => {
+            log::warn!("User not found: {}", login_data.email);
+            Ok(HttpResponse::Unauthorized().json(serde_json::json!({
+                "error": "Invalid credentials"
+            })))
+        }
+        Err(e) => {
+            log::error!("Database error during login: {e}");
+            Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Database error"
+            })))
+        }
     }
 }
 
@@ -74,23 +85,23 @@ pub async fn verify_token(
 
 // Function to create a default user (run this once)
 pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
-    // Use environment variables for default credentials
-    let default_email = std::env::var("DEFAULT_ADMIN_EMAIL")
-        .unwrap_or_else(|_| "admin@treatments.com".to_string());
-    let default_password = std::env::var("DEFAULT_ADMIN_PASSWORD")
-        .unwrap_or_else(|_| "admin123".to_string());
-    let default_name = std::env::var("DEFAULT_ADMIN_NAME")
-        .unwrap_or_else(|_| "Treatment Administrator".to_string());
-
-    // Check if user already exists
-    let existing_user = sqlx::query_scalar::<_, i64>(
-        "SELECT COUNT(*) FROM users WHERE email = ?",
+    // First, check if ANY users exist in the database
+    let user_count = sqlx::query_scalar::<_, i64>(
+        "SELECT COUNT(*) FROM users",
     )
-    .bind(&default_email)
     .fetch_one(db.pool())
     .await?;
 
-    if existing_user == 0 {
+    // Only create default user if database is empty
+    if user_count == 0 {
+        // Use environment variables for default credentials
+        let default_email = std::env::var("DEFAULT_ADMIN_EMAIL")
+            .unwrap_or_else(|_| "admin@treatments.com".to_string());
+        let default_password = std::env::var("DEFAULT_ADMIN_PASSWORD")
+            .unwrap_or_else(|_| "admin123".to_string());
+        let default_name = std::env::var("DEFAULT_ADMIN_NAME")
+            .unwrap_or_else(|_| "Treatment Administrator".to_string());
+
         let password_hash = hash(&default_password, DEFAULT_COST).unwrap();
         let user_id = Uuid::new_v4().to_string();  // Convert to string for SQLite
         let now = Utc::now();
@@ -106,18 +117,50 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
         .execute(db.pool())
         .await?;
 
-        println!("✅ Default user created:");
-        println!("   Email: {}", default_email);
-        println!("   Password: {}", default_password);
+        println!("✅ Default admin user created:");
+        println!("   Email: {default_email}");
+        println!("   Password: {default_password}");
         
         // Warn if using default credentials
         if default_email == "admin@treatments.com" && default_password == "admin123" {
             println!("⚠️  WARNING: Using default credentials! Change them immediately in production!");
             println!("   Set DEFAULT_ADMIN_EMAIL and DEFAULT_ADMIN_PASSWORD environment variables");
         }
+    } else {
+        println!("ℹ️  Database already contains users, skipping default user creation");
     }
 
     Ok(())
+}
+
+// Debug function to list all users (remove in production)
+pub async fn debug_list_users(db: web::Data<Database>) -> Result<HttpResponse> {
+    match sqlx::query_as::<_, User>(
+        "SELECT id, email, password_hash, name, created_at FROM users",
+    )
+    .fetch_all(db.pool())
+    .await
+    {
+        Ok(users) => {
+            let user_list: Vec<_> = users.iter().map(|u| serde_json::json!({
+                "id": u.id,
+                "email": u.email,
+                "name": u.name,
+                "created_at": u.created_at
+            })).collect();
+            
+            Ok(HttpResponse::Ok().json(serde_json::json!({
+                "users": user_list,
+                "count": users.len()
+            })))
+        }
+        Err(e) => {
+            log::error!("Failed to fetch users: {e}");
+            Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Failed to fetch users"
+            })))
+        }
+    }
 }
 
 // Get all users (admin function)

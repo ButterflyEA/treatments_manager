@@ -8,7 +8,6 @@ mod middleware;
 use actix_web::{web, App, HttpServer, middleware::Logger};
 use actix_cors::Cors;
 use actix_files::Files;
-use env_logger;
 use dotenv::dotenv;
 use std::env;
 
@@ -29,11 +28,11 @@ async fn main() -> std::io::Result<()> {
         .unwrap_or_else(|_| "sqlite:./patients.db?mode=rwc".to_string());
     
     let db = Database::new(&database_url).await
-        .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
+        .map_err(std::io::Error::other)?;
     
     // Create default user
     if let Err(e) = create_default_user(&db).await {
-        eprintln!("Warning: Failed to create default user: {}", e);
+        eprintln!("Warning: Failed to create default user: {e}");
     }
     
     let db_data = web::Data::new(db);
@@ -57,15 +56,15 @@ async fn main() -> std::io::Result<()> {
         .parse::<u16>()
         .unwrap_or(8080);
     
-    let bind_address = format!("{}:{}", host, port);
+    let bind_address = format!("{host}:{port}");
     let server_url = if host == "0.0.0.0" {
-        format!("http://0.0.0.0:{} (external access enabled)", port)
+        format!("http://0.0.0.0:{port} (external access enabled)")
     } else {
-        format!("http://{}:{}", host, port)
+        format!("http://{host}:{port}")
     };
 
-    println!("🚀 Starting Treatment Manager Backend Server on {}", server_url);
-    println!("📊 Database: {}", database_url);
+    println!("🚀 Starting Treatment Manager Backend Server on {server_url}");
+    println!("📊 Database: {database_url}");
     println!("🌐 Frontend: Serving static files from ./static");
     println!("🏠 Environment: {}", if host == "127.0.0.1" { "Development (localhost only)" } else { "Production (external access)" });
     println!("📝 GitHub Issues: {}", if std::env::var("GITHUB_TOKEN").is_ok() { "✅ Configured" } else { "❌ Not configured" });
