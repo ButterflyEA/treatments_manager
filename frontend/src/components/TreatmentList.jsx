@@ -5,7 +5,7 @@ import { patientService } from '../services/patientService';
 import TreatmentForm from './TreatmentForm';
 import './TreatmentList.css';
 
-function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton = false }) {
+function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton = false, onEditTreatment = null }) {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'he';
   const [treatments, setTreatments] = useState([]);
@@ -117,8 +117,14 @@ function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton
   };
 
   const handleEditTreatment = (treatment) => {
-    setEditingTreatment(treatment);
-    setShowForm(true);
+    if (onEditTreatment) {
+      // Use external handler (for page navigation)
+      onEditTreatment(treatment.patient_id, treatment.id);
+    } else {
+      // Use internal popup handler (fallback)
+      setEditingTreatment(treatment);
+      setShowForm(true);
+    }
   };
 
   const handleDeleteTreatment = async (treatment) => {

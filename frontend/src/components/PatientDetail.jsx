@@ -4,7 +4,7 @@ import { patientService } from '../services/patientService';
 import TreatmentList from './TreatmentList';
 import './PatientDetail.css';
 
-function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onPatientUpdated }) {
+function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEditTreatment, onPatientUpdated }) {
   const { t } = useTranslation();
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -108,6 +108,7 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onPat
           patientId={patientId} 
           showPatientInfo={false}
           hideAddButton={true}
+          onEditTreatment={onEditTreatment}
         />
       </div>
     </div>

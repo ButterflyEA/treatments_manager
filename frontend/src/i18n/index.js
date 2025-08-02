@@ -86,7 +86,9 @@ const resources = {
       edit_patient: "Edit Patient",
       registrationDate: "Registration Date",
       patient_not_found: "Patient not found",
+      treatment_not_found: "Treatment not found",
       error_loading_patient: "Error loading patient",
+      error_loading_treatment: "Error loading treatment",
       
       // Treatments
       patient_treatments: "Patient Treatments",
@@ -107,7 +109,9 @@ const resources = {
       saving: "Saving...",
       confirm_delete_treatment: "Are you sure you want to delete this treatment?",
       treatment_created_successfully: "Treatment created successfully",
+      treatment_updated_successfully: "Treatment updated successfully",
       add_treatment_for: "Add treatment for",
+      edit_treatment_for: "Edit treatment for",
       back_to_patient: "Back to Patient",
       
       // Treatment Errors
@@ -158,7 +162,34 @@ const resources = {
       error_creating_user: "Error creating user",
       error_updating_user: "Error updating user",
       error_deleting_user: "Error deleting user",
-      error_changing_password: "Error changing password"
+      error_changing_password: "Error changing password",
+      
+      // GitHub Issues
+      report_issue: "Report Issue",
+      report_issue_description: "Help us improve the system by reporting bugs or requesting new features",
+      issue_type: "Issue Type",
+      bug_report: "Bug Report",
+      feature_request: "Feature Request",
+      enhancement: "Enhancement",
+      priority: "Priority",
+      low_priority: "Low",
+      medium_priority: "Medium",
+      high_priority: "High",
+      issue_title: "Title",
+      issue_title_placeholder: "Brief description of the issue or request",
+      issue_description: "Description",
+      issue_description_placeholder: "Provide detailed information about the issue, steps to reproduce (for bugs), or explanation of the requested feature",
+      create_issue: "Create Issue",
+      creating_issue: "Creating Issue...",
+      issue_created_successfully: "Issue created successfully! Thank you for your feedback.",
+      error_creating_issue: "Error creating issue. Please try again.",
+      network_error: "Network error. Please check your connection.",
+      view_on_github: "View on GitHub",
+      issue_guidelines: "Guidelines for Reporting Issues",
+      guideline_1: "Be specific and descriptive in your title",
+      guideline_2: "Provide steps to reproduce for bugs",
+      guideline_3: "Include screenshots if helpful",
+      guideline_4: "Search existing issues before creating duplicates"
     }
   },
   he: {
@@ -243,7 +274,9 @@ const resources = {
       edit_patient: "ערוך מטופל",
       registrationDate: "תאריך רישום",
       patient_not_found: "מטופל לא נמצא",
+      treatment_not_found: "טיפול לא נמצא",
       error_loading_patient: "שגיאה בטעינת מטופל",
+      error_loading_treatment: "שגיאה בטעינת טיפול",
       
       // Treatments
       patient_treatments: "טיפולי המטופל",
@@ -264,7 +297,9 @@ const resources = {
       saving: "שומר...",
       confirm_delete_treatment: "האם אתה בטוח שברצונך למחוק את הטיפול הזה?",
       treatment_created_successfully: "הטיפול נוצר בהצלחה",
+      treatment_updated_successfully: "הטיפול עודכן בהצלחה",
       add_treatment_for: "הוסף טיפול עבור",
+      edit_treatment_for: "ערוך טיפול עבור",
       back_to_patient: "חזור למטופל",
       
       // Treatment Errors
@@ -315,7 +350,34 @@ const resources = {
       error_creating_user: "שגיאה ביצירת משתמש",
       error_updating_user: "שגיאה בעדכון משתמש",
       error_deleting_user: "שגיאה במחיקת משתמש",
-      error_changing_password: "שגיאה בשינוי סיסמה"
+      error_changing_password: "שגיאה בשינוי סיסמה",
+      
+      // GitHub Issues
+      report_issue: "דווח על בעיה",
+      report_issue_description: "עזור לנו לשפר את המערכת על ידי דיווח על באגים או בקשת תכונות חדשות",
+      issue_type: "סוג הבעיה",
+      bug_report: "דיווח באג",
+      feature_request: "בקשת תכונה",
+      enhancement: "שיפור",
+      priority: "עדיפות",
+      low_priority: "נמוכה",
+      medium_priority: "בינונית",
+      high_priority: "גבוהה",
+      issue_title: "כותרת",
+      issue_title_placeholder: "תיאור קצר של הבעיה או הבקשה",
+      issue_description: "תיאור",
+      issue_description_placeholder: "ספק מידע מפורט על הבעיה, שלבים לשחזור (עבור באגים), או הסבר על התכונה המבוקשת",
+      create_issue: "צור בעיה",
+      creating_issue: "יוצר בעיה...",
+      issue_created_successfully: "הבעיה נוצרה בהצלחה! תודה על המשוב שלך.",
+      error_creating_issue: "שגיאה ביצירת בעיה. אנא נסה שוב.",
+      network_error: "שגיאת רשת. אנא בדוק את החיבור שלך.",
+      view_on_github: "צפה ב-GitHub",
+      issue_guidelines: "הנחיות לדיווח על בעיות",
+      guideline_1: "היה ספציפי ותיאורי בכותרת שלך",
+      guideline_2: "ספק שלבים לשחזור עבור באגים",
+      guideline_3: "כלול צילומי מסך אם זה מועיל",
+      guideline_4: "חפש בעיות קיימות לפני יצירת כפילויות"
     }
   }
 };

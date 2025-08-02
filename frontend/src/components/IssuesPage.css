@@ -1,0 +1,246 @@
+.issues-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    direction: inherit;
+}
+
+.issues-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.issues-header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+}
+
+.issues-header p {
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.issue-form-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.issue-form .form-group {
+    margin-bottom: 20px;
+}
+
+.issue-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+.issue-form input,
+.issue-form select,
+.issue-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+.issue-form input:focus,
+.issue-form select:focus,
+.issue-form textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.issue-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.issue-form small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 0.9rem;
+    text-align: end;
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2980b9, #21618c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.submit-btn:disabled {
+    background: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.status-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.status-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.issue-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: auto;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: rgba(0, 123, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.issue-link:hover {
+    background: rgba(0, 123, 255, 0.2);
+    text-decoration: none;
+}
+
+.issue-guidelines {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 25px;
+    border-left: 4px solid #3498db;
+}
+
+.issue-guidelines h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+}
+
+.issue-guidelines ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.issue-guidelines li {
+    padding: 8px 0;
+    position: relative;
+    padding-left: 25px;
+    line-height: 1.5;
+    color: #555;
+}
+
+.issue-guidelines li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* RTL Support */
+[dir="rtl"] .issue-form small {
+    text-align: start;
+}
+
+[dir="rtl"] .status-content {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .issue-link {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+[dir="rtl"] .issue-guidelines {
+    border-left: none;
+    border-right: 4px solid #3498db;
+}
+
+[dir="rtl"] .issue-guidelines li {
+    padding-left: 0;
+    padding-right: 25px;
+}
+
+[dir="rtl"] .issue-guidelines li:before {
+    left: auto;
+    right: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .issues-page {
+        padding: 15px;
+    }
+    
+    .issue-form-container {
+        padding: 20px;
+    }
+    
+    .issues-header h1 {
+        font-size: 2rem;
+    }
+    
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+    }
+    
+    .status-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .issue-link {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}

@@ -32,6 +32,12 @@ function Navigation({ currentPage, onNavigate, user, onLogout }) {
       >
         {t('user_management')}
       </button>
+      <button 
+        className={`nav-button ${currentPage === 'issues' ? 'active' : ''}`}
+        onClick={() => onNavigate('issues')}
+      >
+        📝 {t('report_issue')}
+      </button>
     </div>
   );
 

@@ -112,20 +112,8 @@ function TreatmentForm({ patientId, treatment, onSave, onCancel }) {
 
         <div className="form-actions">
           {isRTL ? (
-            // RTL: Create/Update first (right), Cancel second (left)
+            // RTL: Cancel first (appears left), Create second (appears right)
             <>
-              <button
-                type="submit"
-                className="btn-primary"
-                style={{
-                  backgroundColor: '#28a745',
-                  borderColor: '#28a745',
-                  color: 'white'
-                }}
-                disabled={loading || !formData.summary.trim()}
-              >
-                {loading ? t('saving') : (treatment ? t('update') : t('create'))}
-              </button>
               <button
                 type="button"
                 className="btn-secondary"
@@ -138,6 +126,18 @@ function TreatmentForm({ patientId, treatment, onSave, onCancel }) {
                 disabled={loading}
               >
                 {t('cancel')}
+              </button>
+              <button
+                type="submit"
+                className="btn-primary"
+                style={{
+                  backgroundColor: '#28a745',
+                  borderColor: '#28a745',
+                  color: 'white'
+                }}
+                disabled={loading || !formData.summary.trim()}
+              >
+                {loading ? t('saving') : (treatment ? t('update') : t('create'))}
               </button>
             </>
           ) : (

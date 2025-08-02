@@ -5,9 +5,11 @@ import PatientsPage from './components/PatientsPage'
 import AddPatientPage from './components/AddPatientPage'
 import EditPatientPage from './components/EditPatientPage'
 import AddTreatmentPage from './components/AddTreatmentPage'
+import EditTreatmentPage from './components/EditTreatmentPage'
 import TreatmentPage from './components/TreatmentPage'
 import PatientDetail from './components/PatientDetail'
 import UserManagementPage from './components/UserManagementPage'
+import IssuesPage from './components/IssuesPage'
 import Login from './components/Login'
 import AuthService from './services/AuthService'
 import './App.css'
@@ -16,6 +18,7 @@ function App() {
   const { i18n, t } = useTranslation();
   const [currentPage, setCurrentPage] = useState('patients');
   const [selectedPatientId, setSelectedPatientId] = useState(null);
+  const [selectedTreatmentId, setSelectedTreatmentId] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -77,25 +80,36 @@ function App() {
   const handleNavigate = (page) => {
     setCurrentPage(page);
     setSelectedPatientId(null);
+    setSelectedTreatmentId(null);
   };
 
   const handleViewPatientDetails = (patientId) => {
     setSelectedPatientId(patientId);
+    setSelectedTreatmentId(null);
     setCurrentPage('patient-detail');
   };
 
   const handleEditPatient = (patientId) => {
     setSelectedPatientId(patientId);
+    setSelectedTreatmentId(null);
     setCurrentPage('edit-patient');
   };
 
   const handleAddTreatment = (patientId) => {
     setSelectedPatientId(patientId);
+    setSelectedTreatmentId(null);
     setCurrentPage('add-treatment');
+  };
+
+  const handleEditTreatment = (patientId, treatmentId) => {
+    setSelectedPatientId(patientId);
+    setSelectedTreatmentId(treatmentId);
+    setCurrentPage('edit-treatment');
   };
 
   const handleBackToPatients = () => {
     setSelectedPatientId(null);
+    setSelectedTreatmentId(null);
     setCurrentPage('patients');
   };
 
@@ -111,6 +125,7 @@ function App() {
           onBack={handleBackToPatients}
           onEditPatient={handleEditPatient}
           onAddTreatment={handleAddTreatment}
+          onEditTreatment={handleEditTreatment}
           onPatientUpdated={() => {
             // Could refresh patient list if needed
           }}
@@ -142,6 +157,19 @@ function App() {
       );
     }
 
+    if (currentPage === 'edit-treatment' && selectedPatientId && selectedTreatmentId) {
+      return (
+        <EditTreatmentPage
+          patientId={selectedPatientId}
+          treatmentId={selectedTreatmentId}
+          onBack={handleBackToPatientDetail}
+          onTreatmentUpdated={() => {
+            // Treatment was updated, could refresh if needed
+          }}
+        />
+      );
+    }
+
     switch (currentPage) {
       case 'add-patient':
         return (
@@ -156,6 +184,12 @@ function App() {
       case 'user-management':
         return (
           <UserManagementPage 
+            onBack={() => handleNavigate('patients')}
+          />
+        );
+      case 'issues':
+        return (
+          <IssuesPage 
             onBack={() => handleNavigate('patients')}
           />
         );

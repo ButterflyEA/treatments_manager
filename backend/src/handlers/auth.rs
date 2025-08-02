@@ -74,30 +74,34 @@ pub async fn verify_token(
 
 // Function to create a default user (run this once)
 pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
-    let default_email = "admin@treatments.com";
-    let default_password = "admin123";
-    let default_name = "Treatment Administrator";
+    // Use environment variables for default credentials
+    let default_email = std::env::var("DEFAULT_ADMIN_EMAIL")
+        .unwrap_or_else(|_| "admin@treatments.com".to_string());
+    let default_password = std::env::var("DEFAULT_ADMIN_PASSWORD")
+        .unwrap_or_else(|_| "admin123".to_string());
+    let default_name = std::env::var("DEFAULT_ADMIN_NAME")
+        .unwrap_or_else(|_| "Treatment Administrator".to_string());
 
     // Check if user already exists
     let existing_user = sqlx::query_scalar::<_, i64>(
         "SELECT COUNT(*) FROM users WHERE email = ?",
     )
-    .bind(default_email)
+    .bind(&default_email)
     .fetch_one(db.pool())
     .await?;
 
     if existing_user == 0 {
-        let password_hash = hash(default_password, DEFAULT_COST).unwrap();
+        let password_hash = hash(&default_password, DEFAULT_COST).unwrap();
         let user_id = Uuid::new_v4().to_string();  // Convert to string for SQLite
         let now = Utc::now();
 
         sqlx::query(
             "INSERT INTO users (id, email, password_hash, name, created_at) VALUES (?, ?, ?, ?, ?)",
         )
-        .bind(user_id)
-        .bind(default_email)
-        .bind(password_hash)
-        .bind(default_name)
+        .bind(&user_id)
+        .bind(&default_email)
+        .bind(&password_hash)
+        .bind(&default_name)
         .bind(now)
         .execute(db.pool())
         .await?;
@@ -105,6 +109,12 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
         println!("✅ Default user created:");
         println!("   Email: {}", default_email);
         println!("   Password: {}", default_password);
+        
+        // Warn if using default credentials
+        if default_email == "admin@treatments.com" && default_password == "admin123" {
+            println!("⚠️  WARNING: Using default credentials! Change them immediately in production!");
+            println!("   Set DEFAULT_ADMIN_EMAIL and DEFAULT_ADMIN_PASSWORD environment variables");
+        }
     }
 
     Ok(())

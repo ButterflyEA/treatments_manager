@@ -2,6 +2,7 @@ use actix_web::web;
 use crate::handlers::patient_handler;
 use crate::handlers::treatment_handler;
 use crate::handlers::auth;
+use crate::handlers::github;
 use crate::middleware::AuthMiddleware;
 
 pub fn configure_routes(cfg: &mut web::ServiceConfig) {
@@ -41,6 +42,11 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                             .route("/{id}", web::put().to(auth::update_user))
                             .route("/{id}/password", web::put().to(auth::change_password))
                             .route("/{id}", web::delete().to(auth::delete_user))
+                    )
+                    .service(
+                        web::scope("/github")
+                            .route("/issues", web::post().to(github::create_issue))
+                            .route("/health", web::get().to(github::github_health))
                     )
             )
     );
