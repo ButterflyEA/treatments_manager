@@ -1,7 +1,8 @@
-use actix_web::{web, HttpResponse, Result};
+use actix_web::{web, HttpResponse, Result, Error};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use uuid::Uuid;
 use chrono::Utc;
+use std::env;
 use crate::{
     database::Database,
     models::{LoginRequest, LoginResponse, User, UserInfo, CreateUserRequest, UpdateUserRequest, ChangePasswordRequest},
@@ -582,5 +583,52 @@ pub async fn delete_user(
         Err(_) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({
             "error": "Failed to delete user"
         }))),
+    }
+}
+
+#[allow(dead_code)]
+pub async fn debug_test_password_verification(db: web::Data<Database>) -> Result<HttpResponse, Error> {
+    let default_email = env::var("DEFAULT_ADMIN_EMAIL").unwrap_or_default();
+    let default_password = env::var("DEFAULT_ADMIN_PASSWORD").unwrap_or_default();
+    
+    // Get user from database
+    let user_result = sqlx::query_as::<_, User>(
+        "SELECT id, email, password_hash, name, created_at FROM users WHERE email = ?",
+    )
+    .bind(&default_email)
+    .fetch_one(db.pool())
+    .await;
+    
+    match user_result {
+        Ok(user) => {
+            // Test password verification
+            let verification_result = verify(&default_password, &user.password_hash);
+            
+            println!("=== PASSWORD VERIFICATION DEBUG ===");
+            println!("Email: {}", default_email);
+            println!("Password from env length: {}", default_password.len());
+            println!("Password from env: '{}'", default_password);
+            println!("Stored hash: {}", user.password_hash);
+            println!("Verification result: {:?}", verification_result);
+            
+            // Also test creating a new hash with the same password
+            let new_hash = hash(&default_password, DEFAULT_COST).unwrap_or_default();
+            let verify_new = verify(&default_password, &new_hash);
+            println!("New hash: {}", new_hash);
+            println!("New hash verification: {:?}", verify_new);
+            
+            Ok(HttpResponse::Ok().json(serde_json::json!({
+                "env_password_length": default_password.len(),
+                "stored_hash": user.password_hash,
+                "verification_result": verification_result.unwrap_or(false),
+                "new_hash_test": verify_new.unwrap_or(false)
+            })))
+        },
+        Err(e) => {
+            println!("User not found: {:?}", e);
+            Ok(HttpResponse::NotFound().json(serde_json::json!({
+                "error": "User not found"
+            })))
+        }
     }
 }
