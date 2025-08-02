@@ -72,7 +72,7 @@ pub async fn create_issue(
                         Ok(HttpResponse::Created().json(response))
                     }
                     Err(e) => {
-                        log::error!("Failed to parse GitHub response: {e}");
+                        log::error!("Failed to parse GitHub response: {}", e);
                         Ok(HttpResponse::InternalServerError().json(json!({
                             "error": "Failed to parse GitHub response"
                         })))
@@ -81,15 +81,15 @@ pub async fn create_issue(
             } else {
                 let status = response.status();
                 let error_body = response.text().await.unwrap_or_default();
-                log::error!("GitHub API error {status}: {error_body}");
+                log::error!("GitHub API error {}: {}", status, error_body);
                 
                 Ok(HttpResponse::InternalServerError().json(json!({
-                    "error": format!("GitHub API error: {status}")
+                    "error": format!("GitHub API error: {}", status)
                 })))
             }
         }
         Err(e) => {
-            log::error!("Failed to connect to GitHub API: {e}");
+            log::error!("Failed to connect to GitHub API: {}", e);
             Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to connect to GitHub API"
             })))
