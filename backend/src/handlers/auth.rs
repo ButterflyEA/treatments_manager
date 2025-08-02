@@ -85,27 +85,58 @@ pub async fn verify_token(
 
 // Function to create a default user (run this once)
 pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
+    println!("🔧 Starting default user creation process...");
+    
+    // Log all relevant environment variables (without exposing the password)
+    println!("📋 Environment Variables Check:");
+    println!("   DEFAULT_ADMIN_EMAIL: {}", 
+        std::env::var("DEFAULT_ADMIN_EMAIL").unwrap_or_else(|_| "NOT SET".to_string()));
+    println!("   DEFAULT_ADMIN_PASSWORD: {}", 
+        if std::env::var("DEFAULT_ADMIN_PASSWORD").is_ok() { "SET (hidden)" } else { "NOT SET" });
+    println!("   DEFAULT_ADMIN_NAME: {}", 
+        std::env::var("DEFAULT_ADMIN_NAME").unwrap_or_else(|_| "NOT SET".to_string()));
+    
     // First, check if ANY users exist in the database
+    println!("🗄️  Checking if any users exist in database...");
     let user_count = sqlx::query_scalar::<_, i64>(
         "SELECT COUNT(*) FROM users",
     )
     .fetch_one(db.pool())
     .await?;
+    
+    println!("👥 Found {} existing users in database", user_count);
 
     // Only create default user if database is empty
     if user_count == 0 {
+        println!("✨ Database is empty, creating default admin user...");
+        
         // Use environment variables for default credentials
         let default_email = std::env::var("DEFAULT_ADMIN_EMAIL")
-            .unwrap_or_else(|_| "admin@treatments.com".to_string());
+            .unwrap_or_else(|_| {
+                println!("⚠️  DEFAULT_ADMIN_EMAIL not set, using fallback");
+                "admin@treatments.com".to_string()
+            });
         let default_password = std::env::var("DEFAULT_ADMIN_PASSWORD")
-            .unwrap_or_else(|_| "admin123".to_string());
+            .unwrap_or_else(|_| {
+                println!("⚠️  DEFAULT_ADMIN_PASSWORD not set, using fallback");
+                "admin123".to_string()
+            });
         let default_name = std::env::var("DEFAULT_ADMIN_NAME")
-            .unwrap_or_else(|_| "Treatment Administrator".to_string());
+            .unwrap_or_else(|_| {
+                println!("⚠️  DEFAULT_ADMIN_NAME not set, using fallback");
+                "Treatment Administrator".to_string()
+            });
+
+        println!("🔐 Creating user with:");
+        println!("   Email: {}", default_email);
+        println!("   Name: {}", default_name);
+        println!("   Password: {} characters", default_password.len());
 
         let password_hash = hash(&default_password, DEFAULT_COST).unwrap();
         let user_id = Uuid::new_v4().to_string();  // Convert to string for SQLite
         let now = Utc::now();
 
+        println!("💾 Inserting user into database...");
         sqlx::query(
             "INSERT INTO users (id, email, password_hash, name, created_at) VALUES (?, ?, ?, ?, ?)",
         )
@@ -117,9 +148,10 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
         .execute(db.pool())
         .await?;
 
-        println!("✅ Default admin user created:");
-        println!("   Email: {default_email}");
-        println!("   Password: {default_password}");
+        println!("✅ Default admin user created successfully!");
+        println!("   📧 Email: {}", default_email);
+        println!("   👤 Name: {}", default_name);
+        println!("   🔑 Password: {} (length: {})", default_password, default_password.len());
         
         // Warn if using default credentials
         if default_email == "admin@treatments.com" && default_password == "admin123" {
@@ -127,10 +159,110 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
             println!("   Set DEFAULT_ADMIN_EMAIL and DEFAULT_ADMIN_PASSWORD environment variables");
         }
     } else {
-        println!("ℹ️  Database already contains users, skipping default user creation");
+        println!("ℹ️  Database already contains {} users, skipping default user creation", user_count);
+        
+        // Let's also show what users exist (for debugging)
+        println!("🔍 Existing users in database:");
+        match sqlx::query_as::<_, User>(
+            "SELECT id, email, password_hash, name, created_at FROM users LIMIT 5",
+        )
+        .fetch_all(db.pool())
+        .await
+        {
+            Ok(users) => {
+                for user in users.iter().take(3) { // Show only first 3 for security
+                    println!("   - {} ({})", user.email, user.name);
+                }
+                if users.len() > 3 {
+                    println!("   ... and {} more", users.len() - 3);
+                }
+            }
+            Err(e) => {
+                println!("   ❌ Failed to fetch users: {}", e);
+            }
+        }
     }
 
+    println!("🏁 Default user creation process completed");
     Ok(())
+}
+
+// Debug function to check environment variables (REMOVE IN PRODUCTION!)
+pub async fn debug_env_vars() -> Result<HttpResponse> {
+    let env_status = serde_json::json!({
+        "environment_variables": {
+            "DEFAULT_ADMIN_EMAIL": std::env::var("DEFAULT_ADMIN_EMAIL").unwrap_or_else(|_| "NOT_SET".to_string()),
+            "DEFAULT_ADMIN_PASSWORD": if std::env::var("DEFAULT_ADMIN_PASSWORD").is_ok() { "SET" } else { "NOT_SET" },
+            "DEFAULT_ADMIN_NAME": std::env::var("DEFAULT_ADMIN_NAME").unwrap_or_else(|_| "NOT_SET".to_string()),
+            "JWT_SECRET": if std::env::var("JWT_SECRET").is_ok() { "SET" } else { "NOT_SET" },
+            "DATABASE_URL": std::env::var("DATABASE_URL").unwrap_or_else(|_| "NOT_SET".to_string()),
+            "ENVIRONMENT": std::env::var("ENVIRONMENT").unwrap_or_else(|_| "NOT_SET".to_string()),
+            "RUST_LOG": std::env::var("RUST_LOG").unwrap_or_else(|_| "NOT_SET".to_string())
+        }
+    });
+    
+    Ok(HttpResponse::Ok().json(env_status))
+}
+
+// Force recreate default user (DANGEROUS - REMOVE IN PRODUCTION!)
+pub async fn debug_force_create_user(db: web::Data<Database>) -> Result<HttpResponse> {
+    println!("🚨 FORCE CREATING DEFAULT USER - THIS SHOULD ONLY BE USED FOR DEBUGGING!");
+    
+    // Get environment variables
+    let default_email = std::env::var("DEFAULT_ADMIN_EMAIL")
+        .unwrap_or_else(|_| "admin@treatments.com".to_string());
+    let default_password = std::env::var("DEFAULT_ADMIN_PASSWORD")
+        .unwrap_or_else(|_| "admin123".to_string());
+    let default_name = std::env::var("DEFAULT_ADMIN_NAME")
+        .unwrap_or_else(|_| "Treatment Administrator".to_string());
+
+    println!("📧 Using email: {}", default_email);
+    println!("👤 Using name: {}", default_name);
+    println!("🔑 Password length: {}", default_password.len());
+
+    // First, delete any existing user with this email
+    match sqlx::query("DELETE FROM users WHERE email = ?")
+        .bind(&default_email)
+        .execute(db.pool())
+        .await
+    {
+        Ok(result) => println!("🗑️  Deleted {} existing users with email {}", result.rows_affected(), default_email),
+        Err(e) => println!("⚠️  Error deleting existing users: {}", e),
+    }
+
+    // Create the user
+    let password_hash = hash(&default_password, DEFAULT_COST).unwrap();
+    let user_id = Uuid::new_v4().to_string();
+    let now = Utc::now();
+
+    match sqlx::query(
+        "INSERT INTO users (id, email, password_hash, name, created_at) VALUES (?, ?, ?, ?, ?)",
+    )
+    .bind(&user_id)
+    .bind(&default_email)
+    .bind(&password_hash)
+    .bind(&default_name)
+    .bind(now)
+    .execute(db.pool())
+    .await
+    {
+        Ok(_) => {
+            println!("✅ User created successfully!");
+            Ok(HttpResponse::Ok().json(serde_json::json!({
+                "success": true,
+                "message": "Default user force created",
+                "email": default_email,
+                "name": default_name
+            })))
+        }
+        Err(e) => {
+            println!("❌ Failed to create user: {}", e);
+            Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                "success": false,
+                "error": format!("Failed to create user: {}", e)
+            })))
+        }
+    }
 }
 
 // Debug function to list all users (remove in production)

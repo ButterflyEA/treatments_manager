@@ -68,6 +68,13 @@ async fn main() -> std::io::Result<()> {
     println!("🌐 Frontend: Serving static files from ./static");
     println!("🏠 Environment: {}", if host == "127.0.0.1" { "Development (localhost only)" } else { "Production (external access)" });
     println!("📝 GitHub Issues: {}", if std::env::var("GITHUB_TOKEN").is_ok() { "✅ Configured" } else { "❌ Not configured" });
+    
+    // Show environment variable status for debugging
+    println!("🔧 Environment Variables Status:");
+    println!("   DEFAULT_ADMIN_EMAIL: {}", if std::env::var("DEFAULT_ADMIN_EMAIL").is_ok() { "✅ Set" } else { "❌ Not set" });
+    println!("   DEFAULT_ADMIN_PASSWORD: {}", if std::env::var("DEFAULT_ADMIN_PASSWORD").is_ok() { "✅ Set" } else { "❌ Not set" });
+    println!("   DEFAULT_ADMIN_NAME: {}", if std::env::var("DEFAULT_ADMIN_NAME").is_ok() { "✅ Set" } else { "❌ Not set" });
+    println!("   JWT_SECRET: {}", if std::env::var("JWT_SECRET").is_ok() { "✅ Set" } else { "❌ Not set" });
 
     HttpServer::new(move || {
         let cors = Cors::default()

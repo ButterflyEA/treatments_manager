@@ -106,11 +106,15 @@ Health Check Path: /api/v1/github/health
 
 1. **"Invalid email or password" on first login**
    - **Cause**: Default user not created or environment variables not set correctly
+   - **Debug Steps**: 
+     1. Check Render deployment logs for user creation messages
+     2. Visit `https://your-app.onrender.com/api/auth/debug/env` to verify environment variables
+     3. Visit `https://your-app.onrender.com/api/auth/debug/users` to see if any users exist
+     4. If needed, force create user: `POST https://your-app.onrender.com/api/auth/debug/force-create`
    - **Solution**: 
-     - Check Render logs for user creation messages
-     - Visit `https://your-app.onrender.com/api/auth/debug/users` to see if any users exist
      - Verify environment variables are set correctly in Render dashboard
      - Ensure `DEFAULT_ADMIN_EMAIL` and `DEFAULT_ADMIN_PASSWORD` match what you're trying to login with
+     - Check that variables don't have extra spaces or special characters
 
 2. **No styles visible (CSS not loading)**
    - **Cause**: Static files not being served correctly
