@@ -52,6 +52,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                     .service(
                         web::scope("/github")
                             .route("/issues", web::post().to(github::create_issue))
+                            .route("/issues", web::get().to(github::get_open_issues))
                             .route("/health", web::get().to(github::github_health))
                     )
             )

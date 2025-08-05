@@ -88,16 +88,20 @@ async fn main() -> std::io::Result<()> {
             .app_data(db_data.clone())
             .wrap(cors)
             .wrap(Logger::default())
+            // Configure API routes FIRST (highest priority)
             .configure(configure_routes)
-            // Serve static files (frontend)
-            .service(Files::new("/", "./static").index_file("index.html"))
-            // Fallback route for SPA (Single Page Application)
+            // Serve static assets
+            .service(Files::new("/assets", "./static/assets"))
+            .service(Files::new("/vite.svg", "./static/vite.svg"))
+            // Root index file
+            .route("/", web::get().to(|| async {
+                actix_files::NamedFile::open("./static/index.html")
+            }))
+            // Fallback route for SPA (Single Page Application) - serves index.html for all other routes
             .default_service(
-                web::route()
-                    .guard(actix_web::guard::Not(actix_web::guard::Header("content-type", "application/json")))
-                    .to(|| async {
-                        actix_files::NamedFile::open("./static/index.html")
-                    })
+                web::route().to(|| async {
+                    actix_files::NamedFile::open("./static/index.html")
+                })
             )
     })
     .bind(&bind_address)?

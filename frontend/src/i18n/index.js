@@ -7,7 +7,7 @@ const resources = {
   en: {
     translation: {
       // Page titles and headers
-      pageTitle: "Patient Management System",
+      pageTitle: "Judith Gal Edri Clinic",
       addPatient: "Add New Patient",
       editPatient: "Edit Patient",
       patientsList: "Patients List",
@@ -77,7 +77,7 @@ const resources = {
       hebrew: "Hebrew",
       
       // Navigation
-      treatments_manager: "Treatments Manager",
+      treatments_manager: "Judith Gal Edri Clinic",
       patients: "Patients",
       treatments: "Treatments",
       add_patient: "Add Patient",
@@ -129,7 +129,7 @@ const resources = {
       error_deleting_treatment: "Error deleting treatment",
       
       // Login
-      loginTitle: "Treatment Manager Login",
+      loginTitle: "Judith Gal Edri Clinic - Login",
       email: "Email",
       password: "Password",
       emailPlaceholder: "Enter your email",
@@ -197,13 +197,19 @@ const resources = {
       guideline_1: "Be specific and descriptive in your title",
       guideline_2: "Provide steps to reproduce for bugs",
       guideline_3: "Include screenshots if helpful",
-      guideline_4: "Search existing issues before creating duplicates"
+      guideline_4: "Search existing issues before creating duplicates",
+      open_issues: "Open Issues",
+      refresh: "Refresh",
+      loading_issues: "Loading issues...",
+      no_open_issues: "No open issues found. Great job!",
+      created: "Created",
+      updated: "Updated"
     }
   },
   he: {
     translation: {
       // Page titles and headers
-      pageTitle: "מערכת ניהול מטופלים",
+      pageTitle: "הקליניקה של יהודית גל אדרי",
       addPatient: "הוסף מטופל חדש",
       editPatient: "ערוך מטופל",
       patientsList: "רשימת מטופלים",
@@ -273,7 +279,7 @@ const resources = {
       hebrew: "עברית",
       
       // Navigation
-      treatments_manager: "מנהל הטיפולים",
+      treatments_manager: "הקליניקה של יהודית גל אדרי",
       patients: "מטופלים",
       treatments: "טיפולים",
       add_patient: "הוסף מטופל",
@@ -325,7 +331,7 @@ const resources = {
       error_deleting_treatment: "שגיאה במחיקת טיפול",
       
       // Login
-      loginTitle: "התחברות למנהל הטיפולים",
+      loginTitle: "הקליניקה של יהודית גל אדרי - התחברות",
       email: "אימייל",
       password: "סיסמה",
       emailPlaceholder: "הכנס את האימייל שלך",
@@ -393,7 +399,13 @@ const resources = {
       guideline_1: "היה ספציפי ותיאורי בכותרת שלך",
       guideline_2: "ספק שלבים לשחזור עבור באגים",
       guideline_3: "כלול צילומי מסך אם זה מועיל",
-      guideline_4: "חפש בעיות קיימות לפני יצירת כפילויות"
+      guideline_4: "חפש בעיות קיימות לפני יצירת כפילויות",
+      open_issues: "בעיות פתוחות",
+      refresh: "רענן",
+      loading_issues: "טוען בעיות...",
+      no_open_issues: "לא נמצאו בעיות פתוחות. עבודה מצוינת!",
+      created: "נוצר",
+      updated: "עודכן"
     }
   }
 };

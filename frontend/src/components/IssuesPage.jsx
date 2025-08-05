@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import AuthService from '../services/AuthService';
 import './IssuesPage.css';
 
-// API configuration consistent with other services
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '/api/v1') || 'http://127.0.0.1:8080/api/v1';
+// API configuration - use relative URLs when served from same domain
+const getApiBaseUrl = () => {
+    // If we're running in development mode (localhost:5173), use the dev server URL
+    if (window.location.port === '5173') {
+        return 'http://127.0.0.1:8080/api';
+    }
+    // Otherwise, use relative URLs (production mode served by backend)
+    return '/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const IssuesPage = () => {
     const { t } = useTranslation();
@@ -15,6 +25,54 @@ const IssuesPage = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null);
+    const [openIssues, setOpenIssues] = useState([]);
+    const [isLoadingIssues, setIsLoadingIssues] = useState(false);
+    const [issuesError, setIssuesError] = useState(null);
+
+    // Fetch open issues on component mount
+    useEffect(() => {
+        fetchOpenIssues();
+    }, []);
+
+    const fetchOpenIssues = async () => {
+        console.log('🔍 IssuesPage: Starting to fetch open issues');
+        console.log('🌐 API_BASE_URL:', API_BASE_URL);
+        
+        setIsLoadingIssues(true);
+        setIssuesError(null);
+
+        try {
+            const url = `${API_BASE_URL}/v1/github/issues`;
+            console.log('📡 Making request to:', url);
+            
+            const response = await AuthService.makeAuthenticatedRequest(url, {
+                method: 'GET'
+            });
+
+            if (!response) {
+                setIssuesError('Authentication failed');
+                return;
+            }
+
+            console.log('📨 Response status:', response.status);
+            console.log('📨 Response ok:', response.ok);
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Response data:', result);
+                setOpenIssues(result.issues || []);
+            } else {
+                const error = await response.json();
+                console.error('❌ Response error:', error);
+                setIssuesError(error.error || 'Failed to load issues');
+            }
+        } catch (error) {
+            console.error('❌ Network error:', error);
+            setIssuesError('Network error while loading issues');
+        } finally {
+            setIsLoadingIssues(false);
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -30,15 +88,18 @@ const IssuesPage = () => {
         setSubmitStatus(null);
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${API_BASE_URL}/github/issues`, {
+            const response = await AuthService.makeAuthenticatedRequest(`${API_BASE_URL}/v1/github/issues`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
                 body: JSON.stringify(formData)
             });
+
+            if (!response) {
+                setSubmitStatus({
+                    type: 'error',
+                    message: 'Authentication failed'
+                });
+                return;
+            }
 
             if (response.ok) {
                 const result = await response.json();
@@ -53,6 +114,8 @@ const IssuesPage = () => {
                     type: 'bug',
                     priority: 'medium'
                 });
+                // Refresh the issues list
+                fetchOpenIssues();
             } else {
                 const error = await response.json();
                 setSubmitStatus({
@@ -190,6 +253,96 @@ const IssuesPage = () => {
                                 </a>
                             )}
                         </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Open Issues Section */}
+            <div className="open-issues-section">
+                <div className="open-issues-header">
+                    <h2>{t('open_issues')}</h2>
+                    <button 
+                        onClick={fetchOpenIssues} 
+                        disabled={isLoadingIssues}
+                        className="refresh-btn"
+                    >
+                        🔄 {t('refresh')}
+                    </button>
+                </div>
+
+                {isLoadingIssues && (
+                    <div className="loading-message">
+                        <span className="spinner"></span>
+                        {t('loading_issues')}
+                    </div>
+                )}
+
+                {issuesError && (
+                    <div className="error-message">
+                        ❌ {issuesError}
+                    </div>
+                )}
+
+                {!isLoadingIssues && !issuesError && openIssues.length === 0 && (
+                    <div className="no-issues-message">
+                        ✅ {t('no_open_issues')}
+                    </div>
+                )}
+
+                {!isLoadingIssues && !issuesError && openIssues.length > 0 && (
+                    <div className="issues-list">
+                        {openIssues.map((issue) => (
+                            <div key={issue.number} className="issue-card">
+                                <div className="issue-header">
+                                    <div className="issue-number">#{issue.number}</div>
+                                    <div className="issue-labels">
+                                        {issue.labels.map((label) => (
+                                            <span 
+                                                key={label.name} 
+                                                className="issue-label"
+                                                style={{ backgroundColor: `#${label.color}` }}
+                                            >
+                                                {label.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <h3 className="issue-title">
+                                    <a 
+                                        href={issue.html_url} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="issue-title-link"
+                                    >
+                                        {issue.title}
+                                    </a>
+                                </h3>
+                                {issue.body && (
+                                    <div className="issue-body">
+                                        {issue.body.length > 200 
+                                            ? `${issue.body.substring(0, 200)}...`
+                                            : issue.body
+                                        }
+                                    </div>
+                                )}
+                                <div className="issue-meta">
+                                    <div className="issue-author">
+                                        <img 
+                                            src={issue.user.avatar_url} 
+                                            alt={issue.user.login}
+                                            className="author-avatar"
+                                        />
+                                        <span>{issue.user.login}</span>
+                                    </div>
+                                    <div className="issue-dates">
+                                        <span>{t('created')}: {new Date(issue.created_at).toLocaleDateString()}</span>
+                                        {issue.updated_at !== issue.created_at && (
+                                            <span>{t('updated')}: {new Date(issue.updated_at).toLocaleDateString()}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>
