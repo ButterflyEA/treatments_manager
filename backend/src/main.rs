@@ -40,13 +40,11 @@ async fn main() -> std::io::Result<()> {
     // Configure host and port based on environment
     let host = env::var("SERVER_HOST")
         .unwrap_or_else(|_| {
-            // Auto-detect environment
-            if env::var("RUST_LOG").unwrap_or_default() == "debug" || 
-               env::var("NODE_ENV").unwrap_or_default() == "development" ||
-               env::var("ENVIRONMENT").unwrap_or_default() == "development" {
-                "127.0.0.1".to_string()  // Development: localhost only
+            // Check if we're in debug mode (development) or release mode (production)
+            if cfg!(debug_assertions) {
+                "127.0.0.1".to_string()  // Debug build: localhost only
             } else {
-                "0.0.0.0".to_string()    // Production: accept external connections
+                "0.0.0.0".to_string()    // Release build: accept external connections
             }
         });
     
@@ -66,7 +64,10 @@ async fn main() -> std::io::Result<()> {
     println!("🚀 Starting Treatment Manager Backend Server on {server_url}");
     println!("📊 Database: {database_url}");
     println!("🌐 Frontend: Serving static files from ./static");
-    println!("🏠 Environment: {}", if host == "127.0.0.1" { "Development (localhost only)" } else { "Production (external access)" });
+    println!("🏠 Environment: {} ({})", 
+        if host == "127.0.0.1" { "Development (localhost only)" } else { "Production (external access)" },
+        if cfg!(debug_assertions) { "debug build" } else { "release build" }
+    );
     println!("📝 GitHub Issues: {}", if std::env::var("GITHUB_TOKEN").is_ok() { "✅ Configured" } else { "❌ Not configured" });
     
     // Show environment variable status for debugging

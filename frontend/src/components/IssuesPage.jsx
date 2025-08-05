@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './IssuesPage.css';
 
+// API configuration consistent with other services
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '/api/v1') || 'http://127.0.0.1:8080/api/v1';
+
 const IssuesPage = () => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState({
@@ -28,7 +31,7 @@ const IssuesPage = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('/api/v1/github/issues', {
+            const response = await fetch(`${API_BASE_URL}/github/issues`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
