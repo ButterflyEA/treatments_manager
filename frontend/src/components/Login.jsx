@@ -55,6 +55,7 @@ const Login = ({ onLogin }) => {
               onChange={handleChange}
               required
               placeholder={t('emailPlaceholder')}
+              autocomplete="email"
             />
           </div>
           
@@ -68,6 +69,7 @@ const Login = ({ onLogin }) => {
               onChange={handleChange}
               required
               placeholder={t('passwordPlaceholder')}
+              autocomplete="current-password"
             />
           </div>
 

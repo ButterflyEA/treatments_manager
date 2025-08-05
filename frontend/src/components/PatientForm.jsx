@@ -94,6 +94,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
             onChange={handleChange}
             required
             disabled={loading}
+            autocomplete="name"
           />
         </div>
         <div className="form-group">
@@ -106,6 +107,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
             onChange={handleChange}
             required
             disabled={loading}
+            autocomplete="email"
           />
         </div>
       </div>
@@ -121,6 +123,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
             onChange={handleChange}
             required
             disabled={loading}
+            autocomplete="tel"
           />
         </div>
         <div className="form-group">
@@ -146,6 +149,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
           onChange={handleChange}
           required
           disabled={loading}
+          autocomplete="off"
         />
       </div>
 

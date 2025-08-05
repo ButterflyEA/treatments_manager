@@ -185,11 +185,14 @@ function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton
           <div className="filter-controls">
             <div className="search-filter">
               <input
+                id="search-treatments"
+                name="search"
                 type="text"
                 placeholder={t('searchTreatments')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="filter-search-input"
+                autocomplete="off"
               />
             </div>
             
@@ -201,6 +204,7 @@ function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton
                     <label htmlFor="toDate">{t('toDate')}:</label>
                     <input
                       id="toDate"
+                      name="toDate"
                       type="date"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
@@ -212,6 +216,7 @@ function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton
                     <label htmlFor="fromDate">{t('fromDate')}:</label>
                     <input
                       id="fromDate"
+                      name="fromDate"
                       type="date"
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
@@ -226,6 +231,7 @@ function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton
                     <label htmlFor="fromDate">{t('fromDate')}:</label>
                     <input
                       id="fromDate"
+                      name="fromDate"
                       type="date"
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
@@ -237,6 +243,7 @@ function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton
                     <label htmlFor="toDate">{t('toDate')}:</label>
                     <input
                       id="toDate"
+                      name="toDate"
                       type="date"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}

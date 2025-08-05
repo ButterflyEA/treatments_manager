@@ -166,7 +166,7 @@
   grid-column: 1 / -1;
 }
 
-.detail-item label {
+.detail-item .detail-label {
   font-weight: 600;
   color: #7f8c8d;
   font-size: 0.9rem;

@@ -78,6 +78,7 @@ const resources = {
       language: "Language",
       english: "English",
       hebrew: "Hebrew",
+      selectLanguage: "Select Language",
       
       // Navigation
       treatments_manager: "Judith Gal Edri Clinic",
@@ -283,6 +284,7 @@ const resources = {
       language: "שפה",
       english: "אנגלית",
       hebrew: "עברית",
+      selectLanguage: "בחר שפה",
       
       // Navigation
       treatments_manager: "הקליניקה של יהודית גל אדרי",

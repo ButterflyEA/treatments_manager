@@ -259,11 +259,13 @@ function UserManagementPage({ onBack }) {
                 <label htmlFor="create-name">{t('name')} *</label>
                 <input
                   id="create-name"
+                  name="name"
                   type="text"
                   value={createUserData.name}
                   onChange={(e) => setCreateUserData(prev => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={loading}
+                  autocomplete="name"
                 />
               </div>
               
@@ -271,11 +273,13 @@ function UserManagementPage({ onBack }) {
                 <label htmlFor="create-email">{t('email')} *</label>
                 <input
                   id="create-email"
+                  name="email"
                   type="email"
                   value={createUserData.email}
                   onChange={(e) => setCreateUserData(prev => ({ ...prev, email: e.target.value }))}
                   required
                   disabled={loading}
+                  autocomplete="email"
                 />
               </div>
               
@@ -283,12 +287,14 @@ function UserManagementPage({ onBack }) {
                 <label htmlFor="create-password">{t('password')} *</label>
                 <input
                   id="create-password"
+                  name="password"
                   type="password"
                   value={createUserData.password}
                   onChange={(e) => setCreateUserData(prev => ({ ...prev, password: e.target.value }))}
                   required
                   minLength={6}
                   disabled={loading}
+                  autocomplete="new-password"
                 />
                 <small>{t('password_min_length')}</small>
               </div>
@@ -330,23 +336,29 @@ function UserManagementPage({ onBack }) {
                 {editingUser && editingUser.id === user.id ? (
                   <form onSubmit={handleEditUser} className="edit-user-form">
                     <div className="form-group">
-                      <label>{t('name')}</label>
+                      <label htmlFor="edit-name">{t('name')}</label>
                       <input
+                        id="edit-name"
+                        name="name"
                         type="text"
                         value={editUserData.name}
                         onChange={(e) => setEditUserData(prev => ({ ...prev, name: e.target.value }))}
                         required
                         disabled={loading}
+                        autocomplete="name"
                       />
                     </div>
                     <div className="form-group">
-                      <label>{t('email')}</label>
+                      <label htmlFor="edit-email">{t('email')}</label>
                       <input
+                        id="edit-email"
+                        name="email"
                         type="email"
                         value={editUserData.email}
                         onChange={(e) => setEditUserData(prev => ({ ...prev, email: e.target.value }))}
                         required
                         disabled={loading}
+                        autocomplete="email"
                       />
                     </div>
                     <div className="form-actions">
@@ -413,35 +425,44 @@ function UserManagementPage({ onBack }) {
                     <h4>{t('change_password_for', { name: user.name })}</h4>
                     <form onSubmit={handleChangePassword}>
                       <div className="form-group">
-                        <label>{t('current_password')}</label>
+                        <label htmlFor="current-password">{t('current_password')}</label>
                         <input
+                          id="current-password"
+                          name="current_password"
                           type="password"
                           value={passwordData.current_password}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, current_password: e.target.value }))}
                           required
                           disabled={loading}
+                          autocomplete="current-password"
                         />
                       </div>
                       <div className="form-group">
-                        <label>{t('new_password')}</label>
+                        <label htmlFor="new-password">{t('new_password')}</label>
                         <input
+                          id="new-password"
+                          name="new_password"
                           type="password"
                           value={passwordData.new_password}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, new_password: e.target.value }))}
                           required
                           minLength={6}
                           disabled={loading}
+                          autocomplete="new-password"
                         />
                       </div>
                       <div className="form-group">
-                        <label>{t('confirm_new_password')}</label>
+                        <label htmlFor="confirm-password">{t('confirm_new_password')}</label>
                         <input
+                          id="confirm-password"
+                          name="confirm_password"
                           type="password"
                           value={passwordData.confirm_password}
                           onChange={(e) => setPasswordData(prev => ({ ...prev, confirm_password: e.target.value }))}
                           required
                           minLength={6}
                           disabled={loading}
+                          autocomplete="new-password"
                         />
                       </div>
                       <div className="form-actions">

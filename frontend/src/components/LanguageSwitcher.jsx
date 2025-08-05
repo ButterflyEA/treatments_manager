@@ -27,10 +27,14 @@ const LanguageSwitcher = () => {
 
   return (
     <div className="language-switcher">
+      <label htmlFor="language-select" className="sr-only">{t('selectLanguage')}</label>
       <select 
+        id="language-select"
+        name="language"
         value={i18n.language} 
         onChange={(e) => changeLanguage(e.target.value)}
         className="language-select"
+        aria-label={t('selectLanguage')}
       >
         <option value="en">{t('english')}</option>
         <option value="he">{t('hebrew')}</option>

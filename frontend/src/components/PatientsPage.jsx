@@ -111,11 +111,14 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
               <div className="filter-controls">
                 <div className="search-container">
                   <input
+                    id="search-patients"
+                    name="search"
                     type="text"
                     placeholder={t('searchPatients')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
+                    autocomplete="off"
                   />
                   {searchTerm && (
                     <button
@@ -128,8 +131,10 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
                   )}
                 </div>
                 <div className="checkbox-filter">
-                  <label className="checkbox-label">
+                  <label className="checkbox-label" htmlFor="show-inactive">
                     <input
+                      id="show-inactive"
+                      name="showInactive"
                       type="checkbox"
                       checked={showInactivePatients}
                       onChange={(e) => setShowInactivePatients(e.target.checked)}

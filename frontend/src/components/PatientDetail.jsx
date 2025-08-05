@@ -186,20 +186,20 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEdi
         </div>
         <div className="patient-details-grid">
           <div className="detail-item">
-            <label>{t('email')}</label>
+            <span className="detail-label">{t('email')}</span>
             <span>{patient.email}</span>
           </div>
           <div className="detail-item">
-            <label>{t('phoneNumber')}</label>
+            <span className="detail-label">{t('phoneNumber')}</span>
             <span>{patient.phone_number}</span>
           </div>
           <div className="detail-item">
-            <label>{t('registrationDate')}</label>
+            <span className="detail-label">{t('registrationDate')}</span>
             <span>{formatDate(patient.date)}</span>
           </div>
           {patient.description && (
             <div className="detail-item full-width">
-              <label>{t('description')}</label>
+              <span className="detail-label">{t('description')}</span>
               <span className="description">{patient.description}</span>
             </div>
           )}
