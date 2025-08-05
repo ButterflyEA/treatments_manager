@@ -46,7 +46,7 @@ pub async fn export_patient_to_word(
     let language = query.lang.as_deref().unwrap_or("en");
     
     // Debug logging
-    eprintln!("Export request for patient ID: {} in language: {}", patient_id, language);
+    eprintln!("Export request for patient ID: {patient_id} in language: {language}");
     
     // Debug: List all patients to see what exists
     match db.get_all_patients().await {
@@ -56,7 +56,7 @@ pub async fn export_patient_to_word(
                 eprintln!("  - {} (ID: {})", p.name, p.id);
             }
         }
-        Err(e) => eprintln!("Error fetching all patients: {}", e),
+        Err(e) => eprintln!("Error fetching all patients: {e}"),
     }
 
     // Fetch patient data
@@ -66,13 +66,13 @@ pub async fn export_patient_to_word(
             patient
         },
         Ok(None) => {
-            eprintln!("Patient not found in database for ID: {}", patient_id);
+            eprintln!("Patient not found in database for ID: {patient_id}");
             return Ok(HttpResponse::NotFound().json(serde_json::json!({
                 "error": "Patient not found"
             })));
         }
         Err(e) => {
-            eprintln!("Database error when fetching patient {}: {}", patient_id, e);
+            eprintln!("Database error when fetching patient {patient_id}: {e}");
             return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
                 "error": "Failed to load patient"
             })));
@@ -83,7 +83,7 @@ pub async fn export_patient_to_word(
     let treatments = match db.get_treatments_for_patient(patient_id).await {
         Ok(treatments) => treatments,
         Err(e) => {
-            eprintln!("Database error: {}", e);
+            eprintln!("Database error: {e}");
             return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
                 "error": "Failed to load treatments"
             })));
@@ -96,7 +96,7 @@ pub async fn export_patient_to_word(
     
     Ok(HttpResponse::Ok()
         .content_type("application/rtf")
-        .append_header(("Content-Disposition", format!("attachment; filename=\"{}\"", filename)))
+        .append_header(("Content-Disposition", format!("attachment; filename=\"{filename}\"")))
         .body(rtf_content))
 }
 
@@ -139,7 +139,7 @@ fn get_field_names(language: &str) -> FieldNames {
     }
 }
 
-fn generate_rtf_document(patient: &Patient, treatments: &Vec<Treatment>, language: &str) -> String {
+fn generate_rtf_document(patient: &Patient, treatments: &[Treatment], language: &str) -> String {
     let mut rtf = String::new();
     
     // RTF header with enhanced Hebrew support and RTL when needed
@@ -225,7 +225,7 @@ fn generate_rtf_document(patient: &Patient, treatments: &Vec<Treatment>, languag
     ));
     
     // RTF footer
-    rtf.push_str("}");
+    rtf.push('}');
     
     rtf
 }
@@ -246,9 +246,9 @@ fn escape_rtf_hebrew(text: &str) -> String {
                 if unicode_val > 32767 {
                     // For values > 32767, use negative representation
                     let signed_val = unicode_val as i32 - 65536;
-                    result.push_str(&format!("\\u{}?", signed_val));
+                    result.push_str(&format!("\\u{signed_val}?"));
                 } else {
-                    result.push_str(&format!("\\u{}?", unicode_val));
+                    result.push_str(&format!("\\u{unicode_val}?"));
                 }
             },
             // Handle other Unicode characters
@@ -256,9 +256,9 @@ fn escape_rtf_hebrew(text: &str) -> String {
                 let unicode_val = c as u32;
                 if unicode_val > 32767 {
                     let signed_val = unicode_val as i32 - 65536;
-                    result.push_str(&format!("\\u{}?", signed_val));
+                    result.push_str(&format!("\\u{signed_val}?"));
                 } else {
-                    result.push_str(&format!("\\u{}?", unicode_val));
+                    result.push_str(&format!("\\u{unicode_val}?"));
                 }
             },
             // Regular ASCII characters

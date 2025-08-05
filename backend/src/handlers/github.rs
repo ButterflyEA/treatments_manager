@@ -72,7 +72,7 @@ pub async fn create_issue(
                         Ok(HttpResponse::Created().json(response))
                     }
                     Err(e) => {
-                        log::error!("Failed to parse GitHub response: {}", e);
+                        log::error!("Failed to parse GitHub response: {e}");
                         Ok(HttpResponse::InternalServerError().json(json!({
                             "error": "Failed to parse GitHub response"
                         })))
@@ -81,7 +81,7 @@ pub async fn create_issue(
             } else {
                 let status = response.status();
                 let error_body = response.text().await.unwrap_or_default();
-                log::error!("GitHub API error {}: {}", status, error_body);
+                log::error!("GitHub API error {status}: {error_body}");
                 
                 Ok(HttpResponse::InternalServerError().json(json!({
                     "error": format!("GitHub API error: {}", status)
@@ -89,7 +89,7 @@ pub async fn create_issue(
             }
         }
         Err(e) => {
-            log::error!("Failed to connect to GitHub API: {}", e);
+            log::error!("Failed to connect to GitHub API: {e}");
             Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to connect to GitHub API"
             })))
@@ -134,21 +134,21 @@ pub async fn get_open_issues() -> Result<HttpResponse> {
     let github_repo = std::env::var("GITHUB_REPO")
         .unwrap_or_else(|_| "ButterflyEA/treatments_manager".to_string());
     
-    log::info!("📋 GitHub repo: {}", github_repo);
+    log::info!("📋 GitHub repo: {github_repo}");
     log::info!("🔑 GitHub token configured: {} chars", github_token.len());
     
     // Create HTTP client
     let client = reqwest::Client::new();
     
     // Make request to GitHub API to get open issues
-    let url = format!("https://api.github.com/repos/{}/issues?state=open&sort=created&direction=desc&per_page=20", github_repo);
-    log::info!("🌐 GitHub API URL: {}", url);
-    log::info!("🌐 GitHub API URL: {}", url);
+    let url = format!("https://api.github.com/repos/{github_repo}/issues?state=open&sort=created&direction=desc&per_page=20");
+    log::info!("🌐 GitHub API URL: {url}");
+    log::info!("🌐 GitHub API URL: {url}");
     
     log::info!("🚀 Sending request to GitHub API...");
     match client
         .get(&url)
-        .header("Authorization", format!("token {}", github_token))
+        .header("Authorization", format!("token {github_token}"))
         .header("Accept", "application/vnd.github.v3+json")
         .header("User-Agent", "TreatmentManager/1.0")
         .send()
@@ -156,7 +156,7 @@ pub async fn get_open_issues() -> Result<HttpResponse> {
     {
         Ok(response) => {
             let status = response.status();
-            log::info!("📨 GitHub API response status: {}", status);
+            log::info!("📨 GitHub API response status: {status}");
             
             if response.status().is_success() {
                 log::info!("✅ GitHub API request successful, parsing JSON...");
@@ -206,7 +206,7 @@ pub async fn get_open_issues() -> Result<HttpResponse> {
                         })))
                     }
                     Err(e) => {
-                        log::error!("❌ Failed to parse GitHub issues response: {}", e);
+                        log::error!("❌ Failed to parse GitHub issues response: {e}");
                         Ok(HttpResponse::InternalServerError().json(json!({
                             "error": "Failed to parse GitHub response"
                         })))
@@ -215,7 +215,7 @@ pub async fn get_open_issues() -> Result<HttpResponse> {
             } else {
                 let status = response.status();
                 let error_body = response.text().await.unwrap_or_default();
-                log::error!("❌ GitHub API error {}: {}", status, error_body);
+                log::error!("❌ GitHub API error {status}: {error_body}");
                 
                 Ok(HttpResponse::InternalServerError().json(json!({
                     "error": format!("GitHub API error: {}", status)
@@ -223,7 +223,7 @@ pub async fn get_open_issues() -> Result<HttpResponse> {
             }
         }
         Err(e) => {
-            log::error!("❌ Failed to connect to GitHub API: {}", e);
+            log::error!("❌ Failed to connect to GitHub API: {e}");
             Ok(HttpResponse::InternalServerError().json(json!({
                 "error": "Failed to connect to GitHub API"
             })))

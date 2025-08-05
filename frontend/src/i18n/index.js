@@ -7,7 +7,7 @@ const resources = {
   en: {
     translation: {
       // Page titles and headers
-      pageTitle: "Judith Gal Edri Clinic",
+      pageTitle: "Dr. Judith Gal Edri Clinic",
       addPatient: "Add New Patient",
       editPatient: "Edit Patient",
       patientsList: "Patients List",
@@ -81,7 +81,7 @@ const resources = {
       selectLanguage: "Select Language",
       
       // Navigation
-      treatments_manager: "Judith Gal Edri Clinic",
+      treatments_manager: "Dr. Judith Gal Edri Clinic",
       patients: "Patients",
       treatments: "Treatments",
       add_patient: "Add Patient",
@@ -133,7 +133,7 @@ const resources = {
       error_deleting_treatment: "Error deleting treatment",
       
       // Login
-      loginTitle: "Judith Gal Edri Clinic - Login",
+      loginTitle: "Dr. Judith Gal Edri Clinic - Login",
       email: "Email",
       password: "Password",
       emailPlaceholder: "Enter your email",
@@ -213,7 +213,7 @@ const resources = {
   he: {
     translation: {
       // Page titles and headers
-      pageTitle: "הקליניקה של יהודית גל אדרי",
+      pageTitle: "הקליניקה של ד\"ר יהודית גל אדרי",
       addPatient: "הוסף מטופל חדש",
       editPatient: "ערוך מטופל",
       patientsList: "רשימת מטופלים",
@@ -287,7 +287,7 @@ const resources = {
       selectLanguage: "בחר שפה",
       
       // Navigation
-      treatments_manager: "הקליניקה של יהודית גל אדרי",
+      treatments_manager: "הקליניקה של ד\"ר יהודית גל אדרי",
       patients: "מטופלים",
       treatments: "טיפולים",
       add_patient: "הוסף מטופל",
@@ -339,7 +339,7 @@ const resources = {
       error_deleting_treatment: "שגיאה במחיקת טיפול",
       
       // Login
-      loginTitle: "הקליניקה של יהודית גל אדרי - התחברות",
+      loginTitle: "הקליניקה של ד\"ר יהודית גל אדרי - התחברות",
       email: "אימייל",
       password: "סיסמה",
       emailPlaceholder: "הכנס את האימייל שלך",

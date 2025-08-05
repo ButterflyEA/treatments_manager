@@ -31,7 +31,7 @@ pub async fn login(
             
             // Verify password
             let password_matches = verify(&login_data.password, &user.password_hash).unwrap_or(false);
-            log::info!("Password verification result: {}", password_matches);
+            log::info!("Password verification result: {password_matches}");
             
             if password_matches {
                 log::info!("Password verification successful for user: {}", user.email);
@@ -60,7 +60,7 @@ pub async fn login(
                 // Additional debugging - check if password contains unusual characters
                 let has_non_ascii = !login_data.password.is_ascii();
                 let has_whitespace = login_data.password.chars().any(|c| c.is_whitespace());
-                log::warn!("Password contains non-ASCII chars: {}, whitespace: {}", has_non_ascii, has_whitespace);
+                log::warn!("Password contains non-ASCII chars: {has_non_ascii}, whitespace: {has_whitespace}");
                 
                 Ok(HttpResponse::Unauthorized().json(serde_json::json!({
                     "error": "Invalid credentials"
@@ -119,7 +119,7 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
     .fetch_one(db.pool())
     .await?;
     
-    println!("👥 Found {} existing users in database", user_count);
+    println!("👥 Found {user_count} existing users in database");
 
     // Only create default user if database is empty
     if user_count == 0 {
@@ -143,8 +143,8 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
             });
 
         println!("🔐 Creating user with:");
-        println!("   Email: {}", default_email);
-        println!("   Name: {}", default_name);
+        println!("   Email: {default_email}");
+        println!("   Name: {default_name}");
         println!("   Password: {} characters", default_password.len());
 
         let password_hash = hash(&default_password, DEFAULT_COST).unwrap();
@@ -164,8 +164,8 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
         .await?;
 
         println!("✅ Default admin user created successfully!");
-        println!("   📧 Email: {}", default_email);
-        println!("   👤 Name: {}", default_name);
+        println!("   📧 Email: {default_email}");
+        println!("   👤 Name: {default_name}");
         println!("   🔑 Password: {} (length: {})", default_password, default_password.len());
         
         // Warn if using default credentials
@@ -174,7 +174,7 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
             println!("   Set DEFAULT_ADMIN_EMAIL and DEFAULT_ADMIN_PASSWORD environment variables");
         }
     } else {
-        println!("ℹ️  Database already contains {} users, skipping default user creation", user_count);
+        println!("ℹ️  Database already contains {user_count} users, skipping default user creation");
         
         // Let's also show what users exist (for debugging)
         println!("🔍 Existing users in database:");
@@ -193,7 +193,7 @@ pub async fn create_default_user(db: &Database) -> Result<(), sqlx::Error> {
                 }
             }
             Err(e) => {
-                println!("   ❌ Failed to fetch users: {}", e);
+                println!("   ❌ Failed to fetch users: {e}");
             }
         }
     }
@@ -231,8 +231,8 @@ pub async fn debug_force_create_user(db: web::Data<Database>) -> Result<HttpResp
     let default_name = std::env::var("DEFAULT_ADMIN_NAME")
         .unwrap_or_else(|_| "Treatment Administrator".to_string());
 
-    println!("📧 Using email: {}", default_email);
-    println!("👤 Using name: {}", default_name);
+    println!("📧 Using email: {default_email}");
+    println!("👤 Using name: {default_name}");
     println!("🔑 Password length: {}", default_password.len());
     println!("🔑 Password is ASCII: {}", default_password.is_ascii());
     println!("🔑 Password has whitespace: {}", default_password.chars().any(|c| c.is_whitespace()));
@@ -248,7 +248,7 @@ pub async fn debug_force_create_user(db: web::Data<Database>) -> Result<HttpResp
         .await
     {
         Ok(result) => println!("🗑️  Deleted {} existing users with email {}", result.rows_affected(), default_email),
-        Err(e) => println!("⚠️  Error deleting existing users: {}", e),
+        Err(e) => println!("⚠️  Error deleting existing users: {e}"),
     }
 
     // Create the user
@@ -280,12 +280,12 @@ pub async fn debug_force_create_user(db: web::Data<Database>) -> Result<HttpResp
                     "password_has_whitespace": default_password.chars().any(|c| c.is_whitespace()),
                     "password_first_char": default_password.chars().next().unwrap_or('?').to_string(),
                     "password_last_char": default_password.chars().last().unwrap_or('?').to_string(),
-                    "password_preview": if default_password.len() > 0 { format!("{}***{}", &default_password[0..1], &default_password[default_password.len()-1..]) } else { "EMPTY".to_string() }
+                    "password_preview": if !default_password.is_empty() { format!("{}***{}", &default_password[0..1], &default_password[default_password.len()-1..]) } else { "EMPTY".to_string() }
                 }
             })))
         }
         Err(e) => {
-            println!("❌ Failed to create user: {}", e);
+            println!("❌ Failed to create user: {e}");
             Ok(HttpResponse::InternalServerError().json(serde_json::json!({
                 "success": false,
                 "error": format!("Failed to create user: {}", e)
@@ -613,17 +613,17 @@ pub async fn debug_test_password_verification(db: web::Data<Database>) -> Result
             let verification_result = verify(&default_password, &user.password_hash);
             
             println!("=== PASSWORD VERIFICATION DEBUG ===");
-            println!("Email: {}", default_email);
+            println!("Email: {default_email}");
             println!("Password from env length: {}", default_password.len());
-            println!("Password from env: '{}'", default_password);
+            println!("Password from env: '{default_password}'");
             println!("Stored hash: {}", user.password_hash);
-            println!("Verification result: {:?}", verification_result);
+            println!("Verification result: {verification_result:?}");
             
             // Also test creating a new hash with the same password
             let new_hash = hash(&default_password, DEFAULT_COST).unwrap_or_default();
             let verify_new = verify(&default_password, &new_hash);
-            println!("New hash: {}", new_hash);
-            println!("New hash verification: {:?}", verify_new);
+            println!("New hash: {new_hash}");
+            println!("New hash verification: {verify_new:?}");
             
             Ok(HttpResponse::Ok().json(serde_json::json!({
                 "env_password_length": default_password.len(),
@@ -633,7 +633,7 @@ pub async fn debug_test_password_verification(db: web::Data<Database>) -> Result
             })))
         },
         Err(e) => {
-            println!("User not found: {:?}", e);
+            println!("User not found: {e:?}");
             Ok(HttpResponse::NotFound().json(serde_json::json!({
                 "error": "User not found"
             })))
@@ -680,7 +680,7 @@ pub async fn debug_test_multiple_passwords(db: web::Data<Database>) -> Result<Ht
                 
                 if verification_result {
                     println!("=== FOUND MATCHING PASSWORD ===");
-                    println!("Password: '{}'", password);
+                    println!("Password: '{password}'");
                     println!("Hash: {}", user.password_hash);
                 }
             }
@@ -692,7 +692,7 @@ pub async fn debug_test_multiple_passwords(db: web::Data<Database>) -> Result<Ht
             })))
         },
         Err(e) => {
-            println!("User not found: {:?}", e);
+            println!("User not found: {e:?}");
             Ok(HttpResponse::NotFound().json(serde_json::json!({
                 "error": "User not found"
             })))
