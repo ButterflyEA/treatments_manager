@@ -33,6 +33,7 @@ const resources = {
       refreshBtn: "Refresh",
       saveBtn: "Save",
       clearFilterBtn: "Clear Filter",
+      export_to_word: "Export to Word",
       
       // Status
       active: "Active",
@@ -67,6 +68,8 @@ const resources = {
       errorUpdating: "Error updating patient",
       errorDeleting: "Error deleting patient",
       errorLoading: "Error loading patients",
+      authentication_required: "Authentication required",
+      export_error: "Error exporting patient data",
       
       // Empty states
       noPatients: "No patients found. Add your first patient using the form above.",
@@ -235,6 +238,7 @@ const resources = {
       refreshBtn: "רענן",
       saveBtn: "שמור",
       clearFilterBtn: "נקה סינון",
+      export_to_word: "יצא לווורד",
       
       // Status
       active: "פעיל",
@@ -269,6 +273,8 @@ const resources = {
       errorUpdating: "שגיאה בעדכון מטופל",
       errorDeleting: "שגיאה במחיקת מטופל",
       errorLoading: "שגיאה בטעינת מטופלים",
+      authentication_required: "נדרש אימות",
+      export_error: "שגיאה ביצוא נתוני מטופל",
       
       // Empty states
       noPatients: "לא נמצאו מטופלים. הוסף את המטופל הראשון שלך באמצעות הטופס למעלה.",

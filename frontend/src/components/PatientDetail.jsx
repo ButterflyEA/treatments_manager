@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 import { patientService } from '../services/patientService';
 import TreatmentList from './TreatmentList';
 import './PatientDetail.css';
@@ -58,6 +59,59 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEdi
     }
   };
 
+  const handleExportToWord = async () => {
+    try {
+      // Use relative path - works in both dev and production
+      const API_BASE_URL = '/api';
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError(t('authentication_required'));
+        return;
+      }
+
+      // Get current language from i18n
+      const currentLanguage = i18n.language || 'en';
+
+      const response = await fetch(`${API_BASE_URL}/v1/patients/${patientId}/export?lang=${currentLanguage}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to export patient data');
+      }
+
+      // Get the filename from the response headers
+      const contentDisposition = response.headers.get('Content-Disposition');
+      let filename = 'patient_export.rtf';
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="(.+)"/);
+        if (match) {
+          filename = match[1];
+        }
+      }
+
+      // Create blob and download
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+    } catch (err) {
+      setError(t('export_error') + ': ' + err.message);
+      console.error('Error exporting patient data:', err);
+    }
+  };
+
   if (loading) {
     return <div className="loading">{t('loading')}</div>;
   }
@@ -81,6 +135,13 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEdi
           <span className="back-text">{t('back_to_patients')}</span>
         </button>
         <div className="header-actions">
+          <button
+            className="btn-export"
+            onClick={handleExportToWord}
+            title={t('export_to_word')}
+          >
+            📄 {t('export_to_word')}
+          </button>
           <button
             className="btn-add-treatment"
             onClick={handleAddTreatment}

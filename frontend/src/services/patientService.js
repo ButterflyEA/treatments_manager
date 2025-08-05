@@ -1,9 +1,7 @@
 import AuthService from './AuthService';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '/api/v1') || 'http://127.0.0.1:8080/api/v1';
-
-// Log the API URL for debugging
-console.log('🌐 Frontend API Base URL:', API_BASE_URL);
+// Use relative path - works in both dev and production
+const API_BASE_URL = '/api/v1';
 
 class PatientService {
   async request(endpoint, options = {}) {

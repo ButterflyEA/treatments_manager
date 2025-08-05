@@ -3,7 +3,7 @@ REM Build script for Treatment Manager (Windows)
 
 echo 🔨 Building Treatment Manager Application...
 
-REM Navigate to frontend and build
+REM Navigate to frontend and build (now uses relative paths)
 echo 📦 Building frontend...
 cd frontend
 call npm run build

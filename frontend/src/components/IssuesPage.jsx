@@ -3,17 +3,8 @@ import { useTranslation } from 'react-i18next';
 import AuthService from '../services/AuthService';
 import './IssuesPage.css';
 
-// API configuration - use relative URLs when served from same domain
-const getApiBaseUrl = () => {
-    // If we're running in development mode (localhost:5173), use the dev server URL
-    if (window.location.port === '5173') {
-        return 'http://127.0.0.1:8080/api';
-    }
-    // Otherwise, use relative URLs (production mode served by backend)
-    return '/api';
-};
-
-const API_BASE_URL = getApiBaseUrl();
+// Use relative path - works in both dev and production
+const API_BASE_URL = '/api';
 
 const IssuesPage = () => {
     const { t } = useTranslation();

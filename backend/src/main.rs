@@ -25,7 +25,7 @@ async fn main() -> std::io::Result<()> {
 
     // Initialize database
     let database_url = env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "sqlite:./patients.db?mode=rwc".to_string());
+        .unwrap_or_else(|_| "sqlite:./patient_dev.db?mode=rwc".to_string());
     
     let db = Database::new(&database_url).await
         .map_err(std::io::Error::other)?;

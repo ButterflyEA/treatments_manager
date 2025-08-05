@@ -3,7 +3,7 @@
 
 echo "🔨 Building Treatment Manager Application..."
 
-# Navigate to frontend and build
+# Navigate to frontend and build (now uses relative paths)
 echo "📦 Building frontend..."
 cd frontend
 npm run build

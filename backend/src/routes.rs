@@ -3,6 +3,7 @@ use crate::handlers::patient_handler;
 use crate::handlers::treatment_handler;
 use crate::handlers::auth;
 use crate::handlers::github;
+use crate::handlers::export_handler;
 use crate::middleware::AuthMiddleware;
 
 pub fn configure_routes(cfg: &mut web::ServiceConfig) {
@@ -29,6 +30,7 @@ pub fn configure_routes(cfg: &mut web::ServiceConfig) {
                             .route("/{id}", web::put().to(patient_handler::update_patient))
                             .route("/{id}", web::delete().to(patient_handler::delete_patient))
                             .route("/{id}/toggle-status", web::patch().to(patient_handler::toggle_patient_status))
+                            .route("/{id}/export", web::get().to(export_handler::export_patient_to_word))
                             
                             // Treatment routes nested under patients
                             .route("/{id}/treatments", web::post().to(treatment_handler::create_treatment))
