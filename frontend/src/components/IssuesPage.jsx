@@ -198,7 +198,7 @@ const IssuesPage = () => {
                             placeholder={t('issue_title_placeholder')}
                             required
                             maxLength="100"
-                            autocomplete="off"
+                            autoComplete="off"
                         />
                         <small>{formData.title.length}/100</small>
                     </div>
@@ -214,7 +214,7 @@ const IssuesPage = () => {
                             required
                             rows="8"
                             maxLength="2000"
-                            autocomplete="off"
+                            autoComplete="off"
                         />
                         <small>{formData.description.length}/2000</small>
                     </div>

@@ -26,15 +26,22 @@ async fn main() -> std::io::Result<()> {
     // Initialize database
     let database_url = env::var("DATABASE_URL")
         .unwrap_or_else(|_| "sqlite:./patient_dev.db?mode=rwc".to_string());
-    
+
     let db = Database::new(&database_url).await
         .map_err(std::io::Error::other)?;
-    
+
+    // Run SQLx migrations automatically on startup
+    // This will apply any new migration files in ./migrations
+    if let Err(e) = sqlx::migrate!("./migrations").run(db.pool()).await {
+        eprintln!("Database migration error: {e}");
+        return Err(std::io::Error::other(e));
+    }
+
     // Create default user
     if let Err(e) = create_default_user(&db).await {
         eprintln!("Warning: Failed to create default user: {e}");
     }
-    
+
     let db_data = web::Data::new(db);
 
     // Configure host and port based on environment

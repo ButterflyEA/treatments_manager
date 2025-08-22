@@ -192,7 +192,7 @@ function TreatmentList({ patientId = null, showPatientInfo = true, hideAddButton
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="filter-search-input"
-                autocomplete="off"
+                autoComplete="off"
               />
             </div>
             
