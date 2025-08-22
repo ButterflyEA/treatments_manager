@@ -36,7 +36,7 @@ const PatientList = ({ patients, onEdit, onDelete, onViewDetails, onToggleStatus
                   {patient.active ? t('active') : t('inactive')}
                 </span>
               </h3>
-              <p><strong>{t('email')}:</strong> {patient.email}</p>
+              <p><strong>{t('email')}:</strong> {patient.email ? patient.email : '—'}</p>
               <p><strong>{t('phoneNumber')}:</strong> {patient.phone_number}</p>
               <p><strong>{t('date')}:</strong> {formatDate(patient.date)}</p>
               <p><strong>{t('description')}:</strong> {patient.description}</p>

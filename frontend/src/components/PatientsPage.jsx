@@ -118,7 +118,7 @@ function PatientsPage({ onViewPatientDetails, onEditPatient }) {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
-                    autocomplete="off"
+                    autoComplete="off"
                   />
                   {searchTerm && (
                     <button

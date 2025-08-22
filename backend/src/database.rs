@@ -55,7 +55,7 @@ impl Database {
         for row in rows {
             let id_str: String = row.get("id");
             let name: String = row.get("name");
-            let email: String = row.get("email");
+            let email: Option<String> = row.try_get("email").ok();
             let phone_number: String = row.get("phone_number");
             let description: String = row.get("description");
             let date_str: String = row.get("date");
@@ -96,7 +96,7 @@ impl Database {
             let patient = Patient {
                 id: Uuid::parse_str(&id_str)?,
                 name,
-                email,
+                email: Some(email),
                 phone_number,
                 description,
                 date: DateTime::parse_from_rfc3339(&date_str)?.with_timezone(&Utc),

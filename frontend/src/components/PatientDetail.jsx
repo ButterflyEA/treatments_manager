@@ -187,7 +187,7 @@ function PatientDetail({ patientId, onBack, onEditPatient, onAddTreatment, onEdi
         <div className="patient-details-grid">
           <div className="detail-item">
             <span className="detail-label">{t('email')}</span>
-            <span>{patient.email}</span>
+            <span>{patient.email ? patient.email : '—'}</span>
           </div>
           <div className="detail-item">
             <span className="detail-label">{t('phoneNumber')}</span>

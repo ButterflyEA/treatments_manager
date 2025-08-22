@@ -177,7 +177,7 @@ fn generate_rtf_document(patient: &Patient, treatments: &[Treatment], language: 
     let field_format = if language == "he" { "\\rtlpar\\qr" } else { "\\ltrpar\\ql" };
     
     rtf.push_str(&format!("{}\\b {}: \\b0 {}\\par", field_format, escape_rtf_hebrew(field_names.name), escape_rtf_hebrew(&patient.name)));
-    rtf.push_str(&format!("{}\\b {}: \\b0 {}\\par", field_format, escape_rtf_hebrew(field_names.email), escape_rtf_hebrew(&patient.email)));
+    rtf.push_str(&format!("{}\\b {}: \\b0 {}\\par", field_format, escape_rtf_hebrew(field_names.email), escape_rtf_hebrew(patient.email.as_deref().unwrap_or(""))));
     rtf.push_str(&format!("{}\\b {}: \\b0 {}\\par", field_format, escape_rtf_hebrew(field_names.phone), escape_rtf_hebrew(&patient.phone_number)));
     rtf.push_str(&format!("{}\\b {}: \\b0 {}\\par", field_format, escape_rtf_hebrew(field_names.registration_date), format_date(&patient.date)));
     rtf.push_str(&format!("{}\\b {}: \\b0 {}\\par", field_format, escape_rtf_hebrew(field_names.status), escape_rtf_hebrew(if patient.active { field_names.active } else { field_names.inactive })));

@@ -96,7 +96,7 @@ function TreatmentForm({ patientId, treatment, onSave, onCancel }) {
             required
             rows={4}
             placeholder={t('treatment_summary_placeholder')}
-            autocomplete="off"
+            autoComplete="off"
           />
         </div>
 

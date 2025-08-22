@@ -6,7 +6,7 @@ use chrono::{DateTime, Utc};
 pub struct Patient {
     pub id: Uuid,
     pub name: String,
-    pub email: String,
+    pub email: Option<String>,
     pub phone_number: String,
     pub description: String,
     pub date: DateTime<Utc>,
@@ -16,7 +16,7 @@ pub struct Patient {
 #[derive(Debug, Deserialize)]
 pub struct CreatePatientRequest {
     pub name: String,
-    pub email: String,
+    pub email: Option<String>,
     pub phone_number: String,
     pub description: String,
     pub date: Option<DateTime<Utc>>,
@@ -33,7 +33,7 @@ pub struct UpdatePatientRequest {
 }
 
 impl Patient {
-    pub fn new(name: String, email: String, phone_number: String, description: String, date: Option<DateTime<Utc>>) -> Self {
+    pub fn new(name: String, email: Option<String>, phone_number: String, description: String, date: Option<DateTime<Utc>>) -> Self {
         Self {
             id: Uuid::new_v4(),
             name,
@@ -50,7 +50,7 @@ impl Patient {
             self.name = name;
         }
         if let Some(email) = update_req.email {
-            self.email = email;
+            self.email = Some(email);
         }
         if let Some(phone_number) = update_req.phone_number {
             self.phone_number = phone_number;

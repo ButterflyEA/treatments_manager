@@ -265,7 +265,7 @@ function UserManagementPage({ onBack }) {
                   onChange={(e) => setCreateUserData(prev => ({ ...prev, name: e.target.value }))}
                   required
                   disabled={loading}
-                  autocomplete="name"
+                  autoComplete="name"
                 />
               </div>
               
@@ -279,7 +279,7 @@ function UserManagementPage({ onBack }) {
                   onChange={(e) => setCreateUserData(prev => ({ ...prev, email: e.target.value }))}
                   required
                   disabled={loading}
-                  autocomplete="email"
+                  autoComplete="email"
                 />
               </div>
               
@@ -294,7 +294,7 @@ function UserManagementPage({ onBack }) {
                   required
                   minLength={6}
                   disabled={loading}
-                  autocomplete="new-password"
+                  autoComplete="new-password"
                 />
                 <small>{t('password_min_length')}</small>
               </div>
@@ -345,7 +345,7 @@ function UserManagementPage({ onBack }) {
                         onChange={(e) => setEditUserData(prev => ({ ...prev, name: e.target.value }))}
                         required
                         disabled={loading}
-                        autocomplete="name"
+                        autoComplete="name"
                       />
                     </div>
                     <div className="form-group">
@@ -358,7 +358,7 @@ function UserManagementPage({ onBack }) {
                         onChange={(e) => setEditUserData(prev => ({ ...prev, email: e.target.value }))}
                         required
                         disabled={loading}
-                        autocomplete="email"
+                        autoComplete="email"
                       />
                     </div>
                     <div className="form-actions">
@@ -434,7 +434,7 @@ function UserManagementPage({ onBack }) {
                           onChange={(e) => setPasswordData(prev => ({ ...prev, current_password: e.target.value }))}
                           required
                           disabled={loading}
-                          autocomplete="current-password"
+                          autoComplete="current-password"
                         />
                       </div>
                       <div className="form-group">
@@ -448,7 +448,7 @@ function UserManagementPage({ onBack }) {
                           required
                           minLength={6}
                           disabled={loading}
-                          autocomplete="new-password"
+                          autoComplete="new-password"
                         />
                       </div>
                       <div className="form-group">
@@ -462,7 +462,7 @@ function UserManagementPage({ onBack }) {
                           required
                           minLength={6}
                           disabled={loading}
-                          autocomplete="new-password"
+                          autoComplete="new-password"
                         />
                       </div>
                       <div className="form-actions">

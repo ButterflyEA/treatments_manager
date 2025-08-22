@@ -54,6 +54,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
     
     const submitData = {
       ...formData,
+      email: formData.email.trim() === '' ? null : formData.email.trim(),
       date: formData.date ? new Date(formData.date).toISOString() : null
     };
 
@@ -94,7 +95,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
             onChange={handleChange}
             required
             disabled={loading}
-            autocomplete="name"
+            autoComplete="name"
           />
         </div>
         <div className="form-group">
@@ -105,9 +106,9 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            required
             disabled={loading}
-            autocomplete="email"
+            autoComplete="email"
+            placeholder={t('optionalField')}
           />
         </div>
       </div>
@@ -123,7 +124,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
             onChange={handleChange}
             required
             disabled={loading}
-            autocomplete="tel"
+            autoComplete="tel"
           />
         </div>
         <div className="form-group">
@@ -149,7 +150,7 @@ const PatientForm = ({ patient, onSubmit, onCancel, loading }) => {
           onChange={handleChange}
           required
           disabled={loading}
-          autocomplete="off"
+          autoComplete="off"
         />
       </div>
 
